@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{%block body}
+<div class="content">
+    {% for category in categories %}
+    <h2 class="{{ category }}">کالا های گروه {{ product.category }}</h2>
+    <div class="productsPart">
+        {% for product in products if product.category == category %}
+            <div class="productCard">
+                <div class="content">
+                    <h3 class="productTitle">{{product.name}}</h3>
+                    <h2 class="productPrice">{{product.price}} تومان</h2>
+                </div>
+                {% if product.image %}
+                <img src="{{product.image}}" alt="{{product.name}}">
+                {%else%}
+                <img src="{{product.image}}" alt="{{product.name}}">
+                {%endif%}
+            </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</div>
+{%endblock%}
