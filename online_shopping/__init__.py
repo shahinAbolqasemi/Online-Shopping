@@ -23,7 +23,7 @@ def create_app(test_config=None):
     def main():
         return 'Main Page'
     
-    from . import admin
+    from online_shopping import admin
     app.register_blueprint(admin.bp)
     
     app.add_url_rule('/', endpoint='index')
