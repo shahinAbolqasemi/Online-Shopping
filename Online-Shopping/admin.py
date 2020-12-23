@@ -6,10 +6,10 @@ from cryptography.fernet import Fernet
 
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
-with open ('admins.json') as f:
+with open ('Online-Shopping/admins.json') as f:
     main = json.load(f)
 
-with open('key.txt') as f:
+with open('Online-Shopping/key.txt') as f:
     key = f.read()
 
 cipher_suite = Fernet(key.encode())
