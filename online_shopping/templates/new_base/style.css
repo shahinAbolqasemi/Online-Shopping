@@ -82,6 +82,10 @@ span.psw {
   width: 40%; /* Could be more or less, depending on screen size */
 }
 
+.modal-content h1 {
+    text-align: center;
+}
+
 /* The Close Button (x) */
 .close {
   position: absolute;
