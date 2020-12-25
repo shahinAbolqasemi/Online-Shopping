@@ -69,19 +69,30 @@ def logout():
     return redirect(url_for('admin.login'))
 
 
-@bp.route('/panel')
-def panel():
-    return render_template('admin/orders.html')
+# @bp.route('/panel')
+# def panel():
+#     return render_template('admin/orders.html')
 
 
-@bp.route('/commodity')
-def commodity():
-    pass
+@bp.route('/products')
+def prods():
+    prods = {'لوبیا قرمز گلستان 900 گرمی' : 'مواد غذایی / کالاهای اساسی و خوار و بار',
+         'روغن سرخ کردنی سمن 1.35 کیلویی' : 'مواد غذایی / کالاهای اساسی و خوار و بار',
+         'روغن مایع آفتابگردان حاوی ویتامین دی و ای' : 'مواد غذایی / کاهای اساسی و خوار و بار',
+         'کره سنتی شکلی 100 گرمی' : 'مواد غذایی / لبنیات',
+         'قهوه اسپرسو بن مانو مدل آرتیمان 250 گرمی' : 'مواد غذایی / نوشیدنی'
+         }
 
+    return render_template('product.html', products=prods)
 
 @bp.route('/inventory')
 def inventory():
-    pass
+    invens = ['انبار شماره 1',
+              'انبار شماره 2',
+              'انبار شماره 3'
+              ]
+
+    return render_template('inventory.html', inventories=invens)
 
 
 @bp.route('/price')
