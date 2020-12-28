@@ -1,0 +1,183 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"
+        integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
+        integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="product.css">
+    <title>Online shopping</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light d-flex justify-content-between bg-light ">
+        <div class="buttons">
+            <button type="button" class="btn btn-outline-primary">
+                <span id="buyCount" class="badge bg-danger"></span>
+                سبد خرید
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3"
+                    viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z">
+                    </path>
+                </svg>
+            </button>
+            <button type="button" class="btn btn-outline-primary"
+                onclick="document.getElementById('id01').style.display='block'" style="width:auto;">
+                مدیریت
+            </button>
+            <div id="id01" class="modal">
+
+                <form class="modal-content animate" action="/action_page.php" method="post">
+                    <div class="imgcontainer">
+                        <span onclick="document.getElementById('id01').style.display='none'" class="close"
+                            title="Close Modal">&times;</span>
+                        <img src="empty.jpg" alt="Avatar" class="avatar">
+                    </div>
+
+                    <h1>ورود به پنل مدیریت فروشگاه آنلاین</h1>
+
+                    <div class="container">
+                        <label for="uname"><b>نام کاربری</b></label>
+                        <input type="text" name="uname" required>
+
+                        <label for="psw"><b>رمز عبور</b></label>
+                        <input type="password" name="psw" required>
+
+                        <button class="modallogin" type="submit">ورود</button>
+                        <label>
+                            <input type="checkbox" checked="checked" name="remember"> من را به خاطر بسپار
+                        </label>
+                    </div>
+
+                    <div class="container" style="background-color:#f1f1f1">
+                        <button type="button" onclick="document.getElementById('id01').style.display='none'"
+                            class="btn btn-outline-danger">بازگست به سایت</button>
+                        <span class="psw"><a href="#">رمز را فراموش کردید؟</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <a class="navbar-brand" href="#">
+                <div class="d-inline-flex">
+                    <h1 class="font-weight-bold mar">فروشگاه آنلاین</h1>
+                    <img src="empty.jpg" width="50" height="50" class="d-inline-block align-top" alt="">
+                </div>
+            </a>
+        </div>
+    </nav>
+
+    <hr>
+
+    <div class="row flex-row-reverse">
+        <div class="col col-6">
+            <div class="w3-container">
+                <h2>Product Image Gallery</h2>
+                <p>Click on the images below:</p>
+            </div>
+
+            <div class="border border-primary rounded p-2 m-2">
+                <div class="w3-row-padding">
+                    <div class="w3-col s3 w3-container">
+                        <a href="javascript:void(0)" class="w3-hover-opacity" onclick="openImg('Nature');">
+                            <img src="img_nature_wide.jpg" alt="Nature" style="width:100%">
+                        </a>
+                    </div>
+                    <div class="w3-col s3 w3-container">
+                        <a href="javascript:void(0)" class="w3-hover-opacity" onclick="openImg('Snow');">
+                            <img src="img_snow_wide.jpg" alt="Snow" style="width:100%">
+                        </a>
+                    </div>
+                    <div class="w3-col s3 w3-container">
+                        <a href="javascript:void(0)" class="w3-hover-opacity" onclick="openImg('Mountains');">
+                            <img src="img_mountains_wide.jpg" alt="Mountains" style="width:100%">
+                        </a>
+                    </div>
+                    <div class="w3-col s3 w3-container">
+                        <a href="javascript:void(0)" class="w3-hover-opacity" onclick="openImg('Lights');">
+                            <img src="img_lights_wide.jpg" alt="Lights" style="width:100%">
+                        </a>
+                    </div>
+                </div><br>
+
+                <div id="Nature" class="picture w3-display-container" style="display:none">
+                    <img src="img_nature_wide.jpg" alt="Nature" style="width:100%">
+                    <span onclick="this.parentElement.style.display='none'"
+                        class="w3-display-topright w3-button w3-transparent w3-text-white">&times;</span>
+                    <div class="w3-display-bottomleft w3-container w3-padding w3-text-white">Nature</div>
+                </div>
+
+                <div id="Snow" class="picture w3-display-container" style="display:none">
+                    <img src="img_snow_wide.jpg" alt="Snow" style="width:100%">
+                    <span onclick="this.parentElement.style.display='none'"
+                        class="w3-display-topright w3-button w3-transparent w3-text-white">&times;</span>
+                    <div class="w3-display-bottomleft w3-container w3-padding w3-text-white">Snow</div>
+                </div>
+
+                <div id="Mountains" class="picture w3-display-container" style="display:none">
+                    <img src="img_mountains_wide.jpg" alt="Mountains" style="width:100%">
+                    <span onclick="this.parentElement.style.display='none'"
+                        class="w3-display-topright w3-button w3-transparent">&times;</span>
+                    <div class="w3-display-bottomleft w3-container w3-padding w3-text-white">Mountains</div>
+                </div>
+
+                <div id="Lights" class="picture w3-display-container" style="display:none">
+                    <img src="img_lights_wide.jpg" alt="Lights" style="width:100%">
+                    <span onclick="this.parentElement.style.display='none'"
+                        class="w3-display-topright w3-button w3-transparent w3-text-white">&times;</span>
+                    <div class="w3-display-bottomleft w3-container w3-padding w3-text-white">Northern Lights</div>
+                </div>
+            </div>
+        </div>
+        <div class="col col-3 align-self-end">
+            <div>
+                <h2>
+                    کالای فلان
+                </h2>
+            </div>
+            <div>
+                <h4>
+                    رده بندی
+                </h4>
+            </div>
+            <div>
+                200.000 تومان
+            </div>
+            <div class="d-flex flex-row">
+                <div>
+                    <button type="button" class="btn btn-outline-success">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                            class="bi bi-plus-square" viewBox="0 0 16 16">
+                            <path
+                                d="M14 1a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h12zM2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2z">
+                            </path>
+                            <path
+                                d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z">
+                            </path>
+                        </svg>
+                        افزودن به سبد خرید
+                    </button>
+                </div>
+                <div>
+                    <input class="number" type="number" min="0" style="width: 30%;">
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</body>
+<script src="product.js"></script>
+
+</html>
