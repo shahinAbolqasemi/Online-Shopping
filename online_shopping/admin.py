@@ -51,8 +51,7 @@ def login():
         if valid_admin(username, password):
             session.clear()
             session['admin'] = request.form['username']
-            print(url_for('admin.orders'))
-            return redirect(url_for('admin.orders'))
+            return redirect(url_for('admin.admin_orders'))
 
         elif valid_admin(username, password) == 'invalid username':
             error = 'Username not registered! :('
@@ -72,7 +71,8 @@ def logout():
 
 
 @bp.route('/products/')
-def prods():
+@login_required
+def admin_product():
     prods = {'لوبیا قرمز گلستان 900 گرمی': 'مواد غذایی / کالاهای اساسی و خوار و بار',
              'روغن سرخ کردنی سمن 1.35 کیلویی': 'مواد غذایی / کالاهای اساسی و خوار و بار',
              'روغن مایع آفتابگردان حاوی ویتامین دی و ای': 'مواد غذایی / کاهای اساسی و خوار و بار',
@@ -80,26 +80,28 @@ def prods():
              'قهوه اسپرسو بن مانو مدل آرتیمان 250 گرمی': 'مواد غذایی / نوشیدنی'
              }
 
-    return render_template('product.html', products=prods)
+    return render_template('admin/products.html', products=prods)
 
 
-@bp.route('/inventory/')
-def inventory():
+@bp.route('/warehouses/')
+@login_required
+def admin_warehouse():
     invens = ['انبار شماره 1',
               'انبار شماره 2',
               'انبار شماره 3'
               ]
 
-    return render_template('inventory.html', inventories=invens)
+    return render_template('admin/warehouses.html', inventories=invens)
 
 
-@bp.route('/price/')
-def price():
-    pass
+@bp.route('/quantities/')
+@login_required
+def admin_quantity():
+    return render_template('admin/quantities.html')
 
 
 @bp.route('/orders/')
 @login_required
-def orders():
+def admin_orders():
     """get somethings from database """
     return render_template("admin/orders.html")
