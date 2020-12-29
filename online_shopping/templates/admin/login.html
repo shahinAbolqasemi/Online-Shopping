@@ -8,14 +8,14 @@
     <title>Document</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='auth/loginstyle.css') }}">
 </head>
-<body>
+<body dir="rtl">
     <div class="loginForm">
         <h2>ورود به پنل مدیریت فروشگاه فلان</h2>
         <form method="post">
             <label for="username">نام کاربری:</label>
-            <input type="text" id='username' name="username">
+            <input type="text" id='username' name="username" required>
             <label for="password">رمزعبور:</label>
-            <input type="text" id='password' name="password">
+            <input type="password" id='password' name="password" required>
             <button type="submit">ورود</button>
         </form>
         <a href="#">بازگشت به سایت</a>

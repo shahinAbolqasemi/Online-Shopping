@@ -18,7 +18,8 @@ def create_app(test_config=None):
     #     os.major(app.instance_path)
     # except OSError:
     #     pass
-    
+
+
     @app.route('/')
     def main():
         return 'Main Page'

@@ -6,20 +6,20 @@ from cryptography.fernet import Fernet
 from pymongo import MongoClient
 from bson.json_util import dumps
 from bson import ObjectId
+from online_shopping.db import get_db
 
 
-
-client = MongoClient('localhost', 27017)
-db = client.shop
+# client = MongoClient('localhost', 27017)
+# db = client.shop
+db = get_db()
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 
 def login_required(view):
     """View decorator that redirects anonymous users to the login page."""
-
     @functools.wraps(view)
     def wrapped_view(*args, **kwargs):
-        if "admin" in session:
+        if "admin" not in session:
             return redirect(url_for("admin.login"))
 
         return view(*args, **kwargs)
@@ -27,28 +27,30 @@ def login_required(view):
     return wrapped_view
 
 
-with open('Online_Shopping/admins.json') as f:
-    main = json.load(f)
-
-with open('Online_Shopping/key.txt') as f:
-    key = f.read()
-
-cipher_suite = Fernet(key.encode())
-admins = {}
-for admin in main[1:]:
-    username = admin[0]
-    password = admin[1]
-    admins[username] = cipher_suite.decrypt(password.encode()).decode()
+@bp.before_app_request
+def load_data():
+    with open('instance/admins.json') as f:
+        admins = json.load(f)
+    key = current_app.config["ENCRYPT_KEY"]
+    cipher_suite = Fernet(key.encode())
+    admins_dict = {}
+    for admin in admins:
+        username = admin[0]
+        password = admin[1]
+        admins_dict[username] = cipher_suite.decrypt(password.encode()).decode()
+    print(admins_dict)
+    g.admins = admins_dict
 
 
 def valid_admin(username, password):
+    admins = g.admins
     if username in admins.keys():
         return password == admins[username]
     else:
         return 'invalid username'
 
 
-@bp.route('/login', methods=['POST', 'GET'])
+@bp.route('/login/', methods=['POST', 'GET'])
 def login():
     error = None
     if request.method == 'POST':
@@ -57,7 +59,7 @@ def login():
         if valid_admin(username, password):
             session.clear()
             session['admin'] = request.form['username']
-            return redirect(url_for('admin.panel'))
+            return redirect(url_for('admin.admin_orders'))
 
         elif valid_admin(username, password) == 'invalid username':
             error = 'Username not registered! :('
@@ -70,18 +72,25 @@ def login():
     return render_template('admin/login.html')
 
 
-@bp.route('/logout')
+@bp.route('/logout/')
 def logout():
     session.pop('admin', None)
     return redirect(url_for('admin.login'))
 
 
-# @bp.route('/panel')
-# def panel():
-#     return render_template('admin/orders.html')
-
-
-@bp.route('/products', methods=['POST', 'GET'])
+# @bp.route('/products/')
+# @login_required
+# def admin_product():
+#     prods = {'لوبیا قرمز گلستان 900 گرمی': 'مواد غذایی / کالاهای اساسی و خوار و بار',
+#              'روغن سرخ کردنی سمن 1.35 کیلویی': 'مواد غذایی / کالاهای اساسی و خوار و بار',
+#              'روغن مایع آفتابگردان حاوی ویتامین دی و ای': 'مواد غذایی / کاهای اساسی و خوار و بار',
+#              'کره سنتی شکلی 100 گرمی': 'مواد غذایی / لبنیات',
+#              'قهوه اسپرسو بن مانو مدل آرتیمان 250 گرمی': 'مواد غذایی / نوشیدنی'
+#              }
+#
+# <<<<<<< HEAD
+@bp.route('/products/', methods=['POST', 'GET'])
+@login_required
 def prods():
     # prods = {'لوبیا قرمز گلستان 900 گرمی' : 'مواد غذایی / کالاهای اساسی و خوار و بار',
     #      'روغن سرخ کردنی سمن 1.35 کیلویی' : 'مواد غذایی / کالاهای اساسی و خوار و بار',
@@ -96,7 +105,7 @@ def prods():
         return prods
 
 
-@bp.route('/inventory', methods=['POST', 'GET'])
+@bp.route('/inventory/', methods=['POST', 'GET'])
 @login_required
 def inventory():
     # invens = ['انبار شماره 1',
@@ -126,7 +135,7 @@ def edit_inventory(id):
             db.inventory.update_one({'_id' : ObjectId(id)},
                                 {'$set' : {'name' : name}},
                                     upsert=False)
-        flash('inventory edited.')
+        flash('Inventory edited.')
 
         invens = dumps(db.inventory.find(), indent=4)
         return invens
@@ -136,7 +145,7 @@ def edit_inventory(id):
 def delete_inventory(id):
     if request.method == 'POST':
         db.inventory.delete_one({'_id' : ObjectId(id)})
-        flash('inventory deleted.')
+        flash('Inventory deleted.')
 
         invens = dumps(db.inventory.find(), indent=4)
         return invens
@@ -164,9 +173,30 @@ def price():
     pass
 
 
-@bp.route('/orders', methods=['POST', 'GET'])
+# =======
+#     return render_template('admin/products.html', products=prods)
+
+
+# @bp.route('/warehouses/')
+# @login_required
+# def admin_warehouse():
+#     invens = ['انبار شماره 1',
+#               'انبار شماره 2',
+#               'انبار شماره 3'
+#               ]
+#
+#     return render_template('admin/warehouses.html', inventories=invens)
+
+
+@bp.route('/quantities/')
 @login_required
-def orders():
+def admin_quantity():
+    return render_template('admin/quantities.html')
+
+@bp.route('/orders', methods=['POST', 'GET'])
+# >>>>>>> 31a37d04ca361e7a71b4556a7eec4f9b5bc33030
+@login_required
+def admin_orders():
     """get somethings from database """
     if request.method == 'POST':
         orders = dumps(db.orders.find(), indent=4)
