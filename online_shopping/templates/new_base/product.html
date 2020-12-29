@@ -1,3 +1,6 @@
+<!DOCTYPE html>
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,22 +21,24 @@
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light d-flex justify-content-between bg-light ">
+    <nav class="navbar navbar-expand-lg navbar-light d-flex justify-content-between bg-light bd-navbar">
+        <div>
+            <a class="navbar-brand" href="#">
+                <div class="d-inline-flex">
+                    <img src="empty.jpg" width="50" height="50" class="d-inline-block align-top" alt="">
+                    <h1 class="font-weight-bold mar">فروشگاه آنلاین</h1>
+
+                </div>
+            </a>
+        </div>
+
         <div class="buttons">
-            <button type="button" class="btn btn-outline-primary">
-                <span id="buyCount" class="badge bg-danger"></span>
-                سبد خرید
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3"
-                    viewBox="0 0 16 16">
-                    <path fill-rule="evenodd"
-                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z">
-                    </path>
-                </svg>
-            </button>
+
             <button type="button" class="btn btn-outline-primary"
                 onclick="document.getElementById('id01').style.display='block'" style="width:auto;">
                 مدیریت
             </button>
+
             <div id="id01" class="modal">
 
                 <form class="modal-content animate" action="/action_page.php" method="post">
@@ -58,28 +63,31 @@
                         </label>
                     </div>
 
-                    <div class="container" style="background-color:#f1f1f1">
+                    <div class="container d-flex justify-content-between" style="background-color:#f1f1f1">
                         <button type="button" onclick="document.getElementById('id01').style.display='none'"
                             class="btn btn-outline-danger">بازگست به سایت</button>
                         <span class="psw"><a href="#">رمز را فراموش کردید؟</a></span>
                     </div>
                 </form>
             </div>
+            <button type="button" class="btn btn-outline-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart3"
+                    viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                        d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .49.598l-1 5a.5.5 0 0 1-.465.401l-9.397.472L4.415 11H13a.5.5 0 0 1 0 1H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l.84 4.479 9.144-.459L13.89 4H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm7 0a1 1 0 1 0 0 2 1 1 0 0 0 0-2z">
+                    </path>
+                </svg>
+                سبد خرید
+                <span id="buyCount" class="badge bg-danger"></span>
+            </button>
+
         </div>
 
-        <div>
-            <a class="navbar-brand" href="#">
-                <div class="d-inline-flex">
-                    <h1 class="font-weight-bold mar">فروشگاه آنلاین</h1>
-                    <img src="empty.jpg" width="50" height="50" class="d-inline-block align-top" alt="">
-                </div>
-            </a>
-        </div>
     </nav>
 
     <hr>
 
-    <div class="row flex-row-reverse">
+    <div class="row p-5">
         <div class="col col-6">
             <div class="w3-container">
                 <h2>Product Image Gallery</h2>
@@ -110,7 +118,7 @@
                     </div>
                 </div><br>
 
-                <div id="Nature" class="picture w3-display-container" style="display:none">
+                <div id="Nature" class="picture w3-display-container" style="display:block">
                     <img src="img_nature_wide.jpg" alt="Nature" style="width:100%">
                     <span onclick="this.parentElement.style.display='none'"
                         class="w3-display-topright w3-button w3-transparent w3-text-white">&times;</span>
@@ -139,23 +147,26 @@
                 </div>
             </div>
         </div>
-        <div class="col col-3 align-self-end">
+        <div class="col col-3 align-self-end pt-3">
             <div>
-                <h2>
+                <h1>
                     کالای فلان
-                </h2>
+                </h1>
             </div>
-            <div>
+            <div class="mt-5">
                 <h4>
                     رده بندی
                 </h4>
             </div>
-            <div>
-                200.000 تومان
+            <div class="mt-5">
+                <h1>200,000 تومان</h1>
             </div>
-            <div class="d-flex flex-row">
+            <div class="d-flex flex-row justify-content-between mt-5">
                 <div>
-                    <button type="button" class="btn btn-outline-success">
+                    <input id="number" value="0" type="number" min="0" style="width: 30%;">
+                </div>
+                <div>
+                    <button type="button" class="btn btn-outline-success" onclick="buyCounter()">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-plus-square" viewBox="0 0 16 16">
                             <path
@@ -168,13 +179,23 @@
                         افزودن به سبد خرید
                     </button>
                 </div>
-                <div>
-                    <input class="number" type="number" min="0" style="width: 30%;">
-                </div>
-
             </div>
 
         </div>
+    </div>
+
+    <div class="px-5">
+        <h2>
+            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Deserunt, quaerat voluptas. Eos odio molestiae
+            quia quae recusandae, autem quasi rerum ut. Alias eligendi at illo, odio deleniti dignissimos eaque
+            assumenda!
+            <br>
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Doloremque debitis laudantium accusamus quia alias
+            quas reiciendis omnis ipsa atque fugit cumque aperiam, accusantium cupiditate nisi voluptates. Ratione,
+            nisi. Nemo, pariatur.
+            Dicta excepturi natus facilis a, illum assumenda, voluptatibus vitae in porro, aliquam amet enim laboriosam
+            quisquam expedita ipsum deserunt esse. Hic ipsum, obcaecati magni autem optio ipsa nam. Placeat, blanditiis.
+        </h2>
     </div>
 
 </body>
