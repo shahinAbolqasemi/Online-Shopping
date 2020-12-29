@@ -28,25 +28,25 @@
                 <div class="position-sticky pt-3">
                     <ul class="nav flex-column">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">
+                            <a class="nav-link" aria-current="page" href="{{ url_for('admin.admin_orders') }}">
                                 <span data-feather="home"></span>
                                 سفارش ها
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ url_for('admin.admin_quantity') }}">
                                 <span data-feather="home"></span>
                                 موجودی و قیمت ها
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ url_for('admin.admin_warehouse') }}">
                                 <span data-feather="home"></span>
                                 انبارها
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" href="{{ url_for('admin.admin_product') }}">
                                 <span data-feather="home"></span>
                                 کالاها
                             </a>
