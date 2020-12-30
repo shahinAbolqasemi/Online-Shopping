@@ -1,73 +1,21 @@
 {% extends 'admin/base.html' %}
 {% block content %}
-Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-Accusamus accusantium aperiam autem corporis culpa dicta dolorum
-ex exercitationem fuga, in incidunt nihil numquam officia officiis
-quam quasi, reiciendis repudiandae ut!
+<table class="col table table-striped mt-4">
+    <thead>
+        <tr>
+            <th>
+                نام انبار
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    {% for inventory in inventories %}
+    <tbody>
+        <tr>
+            <td>inventory.name</td>
+            <td><a href="#">ویرایش</a><a href="#"> حذف</a> </td>
+        </tr>
+    </tbody>
+    {% endfor %}
+</table>
 {% endblock %}
