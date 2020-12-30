@@ -4,6 +4,8 @@ from werkzeug.security import *
 import json
 from cryptography.fernet import Fernet
 
+from online_shopping.db import get_db
+
 # CONST for validation of admin
 SUCCESS_AUTH = 0
 INVALID_PASSWORD = 2
@@ -109,4 +111,5 @@ def admin_quantity():
 @login_required
 def admin_orders():
     """get somethings from database """
+    orders = get_db().orders.find()
     return render_template("admin/orders.html")
