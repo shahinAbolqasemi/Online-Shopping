@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 
 from online_shopping.admin import login_required
 from online_shopping.db import get_db
+from online_shopping.helpers import JSONEncoder
 
 bp = Blueprint('api', __name__, url_prefix='/api')
 
@@ -14,9 +15,8 @@ def load_():
 @bp.route('/product/list/')
 @login_required
 def prod_list():
-    products_collection = get_db().products
-    res = list(products_collection.find({}, {"_id": 0}))
-    return jsonify(res)
+    products = list(get_db().products.find())
+    return jsonify(products)
 
 
 @bp.route('/product/<int:product_id>/')
@@ -102,7 +102,8 @@ def quantity_delete():
 @bp.route('/order/list/')
 @login_required
 def order_list():
-    return ...
+    orders = list(get_db().orders.find())
+    return jsonify(orders)
 
 
 @bp.route('/order/<int:order_id>/')
