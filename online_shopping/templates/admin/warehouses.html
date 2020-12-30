@@ -71,3 +71,7 @@ Accusamus accusantium aperiam autem corporis culpa dicta dolorum
 ex exercitationem fuga, in incidunt nihil numquam officia officiis
 quam quasi, reiciendis repudiandae ut!
 {% endblock %}
+{% block script %}
+{{ super() }}
+<script src="{{ url_for('static', filename='admin/warehouses.js') }}"></script>
+{% endblock %}
