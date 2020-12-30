@@ -1,0 +1,1 @@
+This project is about to represents an online shop coded with flask framework.
