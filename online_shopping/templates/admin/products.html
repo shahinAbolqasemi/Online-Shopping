@@ -18,12 +18,16 @@
     {% for product in products %}
     <tbody>
         <tr>
-            <td>product.image</td>
-            <td>product.name</td>
-            <td>product.category</td>
+            <td>{{ product.image }}</td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.category }}</td>
             <td><a href="#">ویرایش</a><a href="#"> حذف</a> </td>
         </tr>
     </tbody>
     {% endfor %}
 </table>
+{% endblock %}
+{% block script %}
+{{ super() }}
+<script src="{{ url_for('static', filename='admin/products.js') }}"></script>
 {% endblock %}

@@ -20,15 +20,20 @@
     </thead>
     {% for product in products %}
         {% for inventory in product.inventories %}
-    <tbody>
-        <tr>
-            <td>inventory.name</td>
-            <td>product.name</td>
-            <td>inventory.price</td>
-            <td>inventory.quantity</td>
-            <td><a href="#">ویرایش</a><a href="#"> حذف</a> </td>
-        </tr>
-    </tbody>
+            <tbody>
+                <tr>
+                    <td>{{ inventory.name }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ inventory.price }}</td>
+                    <td>{{ inventory.quantity }}</td>
+                    <td><a href="#">ویرایش</a><a href="#"> حذف</a> </td>
+                </tr>
+            </tbody>
+        {% endfor %}
     {% endfor %}
 </table>
+{% endblock %}
+{% block script %}
+{{ super() }}
+<script src="{{ url_for('static', filename='admin/quantities.js') }}"></script>
 {% endblock %}

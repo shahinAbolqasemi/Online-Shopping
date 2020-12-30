@@ -12,10 +12,14 @@
     {% for inventory in inventories %}
     <tbody>
         <tr>
-            <td>inventory.name</td>
+            <td>{{ inventory.name }}</td>
             <td><a href="#">ویرایش</a><a href="#"> حذف</a> </td>
         </tr>
     </tbody>
     {% endfor %}
 </table>
+{% endblock %}
+{% block script %}
+{{ super() }}
+<script src="{{ url_for('static', filename='admin/warehouses.js') }}"></script>
 {% endblock %}

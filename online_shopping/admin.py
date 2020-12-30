@@ -8,9 +8,11 @@ from bson.json_util import dumps
 from bson import ObjectId
 from online_shopping.db import get_db
 
+# CONST for validation of admin
+SUCCESS_AUTH = 0
+INVALID_PASSWORD = 2
+INVALID_USERNAME = 1
 
-
-db = get_db()
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 
@@ -43,30 +45,30 @@ def load_data():
 
 def valid_admin(username, password):
     admins = g.admins
-    if username in admins.keys():
-        return password == admins[username]
+    if username in admins:
+        if password == admins[username]:
+            return SUCCESS_AUTH
+        else:
+            return INVALID_PASSWORD
     else:
-        return 'invalid username'
+        return INVALID_USERNAME
 
 
 @bp.route('/login/', methods=['POST', 'GET'])
 def login():
-    error = None
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        if valid_admin(username, password):
+        if valid_admin(username, password) == SUCCESS_AUTH:
             session.clear()
             session['admin'] = request.form['username']
             return redirect(url_for('admin.admin_orders'))
-
-        elif valid_admin(username, password) == 'invalid username':
-            error = 'Username not registered! :('
-
+        elif valid_admin(username, password) == INVALID_USERNAME:
+            flash('Username not registered! :(')
         else:
-            error = 'Invalid Password'
-
-        flash(error)
+            flash('Invalid Password')
+    elif "admin" in session:
+        return redirect(url_for('admin.admin_orders'))
 
     return render_template('admin/login.html')
 
@@ -80,14 +82,16 @@ def logout():
 
 @bp.route('/products/')
 @login_required
-def prods():
+def admin_product():
+    db = get_db()
     prods = list(db.products.find())
     return render_template('admin/products.html', products=prods)
 
 
 @bp.route('/inventory/')
 @login_required
-def inventory():
+def admin_warehouse():
+    db = get_db()
     invens = list(db.inventory.find())
     return render_template('admin/warehouses.html', inventories=invens)
 
@@ -96,6 +100,7 @@ def inventory():
 @bp.route('/quantities/')
 @login_required
 def admin_quantity():
+    db = get_db()
     prods = list(db.products.find())
     return render_template('admin/quantities.html', products=prods)
 

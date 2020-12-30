@@ -7,10 +7,13 @@ window.onclick = function(event) {
     }
 }
 
+
 var counter = 0;
-function buyCounter(event) {
-  counter += 1
+var z = document.getElementById("number");
+function buyCounter() {
+  counter += z
   document.getElementById("buyCount").innerHTML = counter ;
+  document.getElementById("number").value = 0;
 }
 
 function openImg(imgName) {
@@ -21,3 +24,4 @@ function openImg(imgName) {
     }
     document.getElementById(imgName).style.display = "block";
   }
+  
