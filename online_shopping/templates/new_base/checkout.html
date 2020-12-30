@@ -15,7 +15,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js"
         integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
         crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="index.css">
+    <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
+    <link rel="stylesheet" href="checkout.css">
     <title>Online shopping</title>
 </head>
 
@@ -86,85 +87,39 @@
 
     <hr>
 
-    <div class="firstProduct m-3 ">
-        <div class="mx-4"><a class="text-decoration-none" href="">
-                <h1>کالاهای گروه لبنیات</h1>
-            </a></div>
-        <div class="card-group ">
-            <div class="card m-4 border border-primary rounded">
-                <img class="card-img-top" src="empty.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <div><button type="button" class="btn btn-outline-primary" onclick="buyCounter(event)">خرید</button>
+    <div class="d-flex justify-content-center mt-5">
+        <div class="col col-7">
+            <h1>نهایی کردن خرید</h1><br>
+            <div class="row">
+                <div class="col">
+                    <label for="fname"><b>نام:</b></label>
+                    <input type="text" name="fname" required><br><br>
+                    <label for="adress"><b>آدرس:</b></label>
+                    <input type="text" class="form-control" id="adress" placeholder="استان، شهر، خیابان، کوچه، پلاک"
+                        required><br><br>
+                    <label for="deliverDate"><b>تاریخ تحویل:</b></label><br>
+                    <!-- <input type="text" name="deliverDate"><br> -->
+                    <div class="col-12">
+                        <input class="form-control" type="date" value="2011-08-19">
                     </div>
-                    <div><small class="text-muted">قیمت</small></div>
                 </div>
-            </div>
-
-            <div class="card m-4 border border-primary rounded">
-                <img class="card-img-top" src="empty.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <div><button type="button" class="btn btn-outline-primary" onclick="buyCounter(event)">خرید</button>
+                <div class="col">
+                    <label for="lname"><b>نام خانوادگی:</b></label>
+                    <input type="text" name="lname" required><br><br>
+                    <div class="d-inline-flex">
+                        <label for="phoneNumber"><b>تلفن همراه:</b></label>
+                        <p class="font-weight-light mx-4">جهت هماهنگی ارسال سفارش</p>
                     </div>
-                    <div><small class="text-muted">قیمت</small></div>
+                    <input type="text" name="phoneNumber" required>
                 </div>
+            </div><br><br>
+            <div class="d-flex justify-content-center">
+                <button type="button" class="btn btn-success px-5"><b>ثبت تهایی سفارش</b></button>
             </div>
-
-            <div class="card m-4 border border-primary rounded">
-                <img class="card-img-top" src="empty.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <div><button type="button" class="btn btn-outline-primary" onclick="buyCounter(event)">خرید</button>
-                    </div>
-                    <div><small class="text-muted">قیمت</small></div>
-                </div>
-            </div>
-
-            <div class="card m-4 border border-primary rounded">
-                <img class="card-img-top" src="empty.jpg" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <div><button type="button" class="btn btn-outline-primary" onclick="buyCounter(event)">خرید</button>
-                    </div>
-                    <div><small class="text-muted">قیمت</small></div>
-                </div>
-            </div>
-
-
         </div>
     </div>
 
-    <hr><br>
-    <div class="d-flex justify-content-center">
-        <nav aria-label="Page navigation example ">
-            <ul class="pagination d-flex flex-row-reverse">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </nav>
-    </div>
-
 </body>
-<script src="index.js"></script>
+<script src="checkout.js"></script>
 
 </html>

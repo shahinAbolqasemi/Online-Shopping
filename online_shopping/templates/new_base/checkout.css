@@ -2,6 +2,10 @@
     margin-left: 10px;
 }
 
+a{
+    text-decoration: none;
+}
+
 hr{
     margin: 0;
 }
