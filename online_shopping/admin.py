@@ -9,8 +9,7 @@ from bson import ObjectId
 from online_shopping.db import get_db
 
 
-# client = MongoClient('localhost', 27017)
-# db = client.shop
+
 db = get_db()
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -78,135 +77,35 @@ def logout():
     return redirect(url_for('admin.login'))
 
 
-# @bp.route('/products/')
-# @login_required
-# def admin_product():
-#     prods = {'لوبیا قرمز گلستان 900 گرمی': 'مواد غذایی / کالاهای اساسی و خوار و بار',
-#              'روغن سرخ کردنی سمن 1.35 کیلویی': 'مواد غذایی / کالاهای اساسی و خوار و بار',
-#              'روغن مایع آفتابگردان حاوی ویتامین دی و ای': 'مواد غذایی / کاهای اساسی و خوار و بار',
-#              'کره سنتی شکلی 100 گرمی': 'مواد غذایی / لبنیات',
-#              'قهوه اسپرسو بن مانو مدل آرتیمان 250 گرمی': 'مواد غذایی / نوشیدنی'
-#              }
-#
-# <<<<<<< HEAD
-@bp.route('/products/', methods=['POST', 'GET'])
+
+@bp.route('/products/')
 @login_required
 def prods():
-    # prods = {'لوبیا قرمز گلستان 900 گرمی' : 'مواد غذایی / کالاهای اساسی و خوار و بار',
-    #      'روغن سرخ کردنی سمن 1.35 کیلویی' : 'مواد غذایی / کالاهای اساسی و خوار و بار',
-    #      'روغن مایع آفتابگردان حاوی ویتامین دی و ای' : 'مواد غذایی / کاهای اساسی و خوار و بار',
-    #      'کره سنتی شکلی 100 گرمی' : 'مواد غذایی / لبنیات',
-    #      'قهوه اسپرسو بن مانو مدل آرتیمان 250 گرمی' : 'مواد غذایی / نوشیدنی'
-    #      }
-    #
-    # return render_template('product.html', products=prods)
-    if request.method == 'POST':
-        prods = dumps(db.products.find(), indent=4)
-        return prods
+    prods = list(db.products.find())
+    return render_template('admin/products.html', products=prods)
 
 
-@bp.route('/inventory/', methods=['POST', 'GET'])
+@bp.route('/inventory/')
 @login_required
 def inventory():
-    # invens = ['انبار شماره 1',
-    #           'انبار شماره 2',
-    #           'انبار شماره 3'
-    #           ]
-    # 
-    # return render_template('inventory.html', inventories=invens)
-    if request.method == 'POST':
-        invens = dumps(db.inventory.find(), indent=4)
-        return invens
+    invens = list(db.inventory.find())
+    return render_template('admin/warehouses.html', inventories=invens)
 
-@bp.route('/inventory/<str:id>/edit', methods=['POST', 'GET'])
-@login_required
-def edit_inventory(id):
-    if request.method == 'POST':
-        name = request.form['name']
-        error = None
-
-        if not name:
-            error = 'Name is required.'
-
-        if error is not None:
-            flash(error)
-
-        else:
-            db.inventory.update_one({'_id' : ObjectId(id)},
-                                {'$set' : {'name' : name}},
-                                    upsert=False)
-        flash('Inventory edited.')
-
-        invens = dumps(db.inventory.find(), indent=4)
-        return invens
-
-@bp.route('/inventory/<str:id>/delete', methods=['POST', 'GET'])
-@login_required
-def delete_inventory(id):
-    if request.method == 'POST':
-        db.inventory.delete_one({'_id' : ObjectId(id)})
-        flash('Inventory deleted.')
-
-        invens = dumps(db.inventory.find(), indent=4)
-        return invens
-
-@bp.route('/inventory/add', methods=['POST', 'GET'])
-@login_required
-def add_inventory():
-    if request.method == 'POST':
-        name = request.form['name']
-        new_inv = {
-            'name' : name
-        }
-        db.inventory.insert_one(new_inv)
-
-        flash('Inventroy added.')
-        invens = dumps(db.inventory.find(), indent=4)
-        return invens
-
-
-
-        
-
-@bp.route('/price')
-def price():
-    pass
-
-
-# =======
-#     return render_template('admin/products.html', products=prods)
-
-
-# @bp.route('/warehouses/')
-# @login_required
-# def admin_warehouse():
-#     invens = ['انبار شماره 1',
-#               'انبار شماره 2',
-#               'انبار شماره 3'
-#               ]
-#
-#     return render_template('admin/warehouses.html', inventories=invens)
 
 
 @bp.route('/quantities/')
 @login_required
 def admin_quantity():
-    return render_template('admin/quantities.html')
+    prods = list(db.products.find())
+    return render_template('admin/quantities.html', products=prods)
 
-@bp.route('/orders', methods=['POST', 'GET'])
-# >>>>>>> 31a37d04ca361e7a71b4556a7eec4f9b5bc33030
+
+@bp.route('/orders/')
 @login_required
 def admin_orders():
     """get somethings from database """
-    if request.method == 'POST':
-        orders = dumps(db.orders.find(), indent=4)
-        return orders
+    return render_template("admin/orders.html")
 
 
-@bp.route('/orders/<str:id>/check-order', methods=['POST', 'GET'])
-@login_required
-def check_order(id):
-    if request.method == 'POST':
-        order = dumps(db.orders.find_one({'_id' : ObjectId(id)}), indent=4)
-        return order
+
 
