@@ -90,7 +90,7 @@ def admin_product():
     return render_template('admin/products.html', products=prods)
 
 
-@bp.route('/inventory/')
+@bp.route('/warehouses/')
 @login_required
 def admin_warehouse():
     db = get_db()
