@@ -8,6 +8,8 @@ from bson.json_util import dumps
 from bson import ObjectId
 from online_shopping.db import get_db
 
+from online_shopping.db import get_db
+
 # CONST for validation of admin
 SUCCESS_AUTH = 0
 INVALID_PASSWORD = 2
@@ -109,6 +111,7 @@ def admin_quantity():
 @login_required
 def admin_orders():
     """get somethings from database """
+    orders = get_db().orders.find()
     return render_template("admin/orders.html")
 
 

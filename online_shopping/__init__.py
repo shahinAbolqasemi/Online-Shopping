@@ -2,6 +2,8 @@ from flask import *
 import os
 import json
 
+from online_shopping.helpers import JSONEncoder
+
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -10,7 +12,7 @@ def create_app(test_config=None):
         app.config.from_pyfile('config.py', silent=True)
     else:
         app.config.update(test_config)
-
+    app.json_encoder = JSONEncoder
     # app.logger.debug('app.config = %s', app.config)
 
     # try:
