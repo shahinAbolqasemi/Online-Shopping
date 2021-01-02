@@ -1,0 +1,52 @@
+{% extends "blog/base.html" %}
+{% block body %}
+    <div class="row">
+        <div class="col col-2 border border-dark border-bottom-0 border-top-0 border-right-0">
+            <ul class="list-unstyled">
+                {% for category in categories %}
+                    <li class="{{ category }} mt-3"><a href="">first product</a>
+                        <ul>
+                            {% for product in products if product.category == category %}
+                                <li><a href="">{{ product }}</a></li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col col-10">
+            <div class="col firstProduct" id="main">
+                <div class="m-3">
+                    <div class="mx-4"><a href="">
+                        <h1>کالاهای گروه {{ category }}</h1>
+                    </a></div>
+                    <div class="card-group">
+                        {% for product in products if product.category == category %}
+                            <div class="card m-4 border border-primary rounded">
+                                {% if product.image %}
+                                    <img class="card-img-top" src="{{ product.image }}" alt="{{ product.name }}">
+                                {% else %}
+                                    <img class="card-img-top" src="" alt="{{ product.name }}">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ product.name }}</h5>
+                                    <p class="card-text">{{ product.description }}</p>
+                                </div>
+                                <div class="card-footer d-flex justify-content-between">
+                                    <div>
+                                        <button type="button" class="btn btn-outline-primary" onclick="buyCounter()">
+                                            خرید
+                                        </button>
+                                    </div>
+                                    <div><small class="text-muted">{{ product.price }} تومان</small></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
