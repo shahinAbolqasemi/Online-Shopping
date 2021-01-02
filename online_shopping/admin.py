@@ -1,12 +1,12 @@
+from cryptography.fernet import Fernet
 from flask import *
 import functools
-from werkzeug.security import *
+# from werkzeug.security import *
 import json
-from cryptography.fernet import Fernet
-from pymongo import MongoClient
-from bson.json_util import dumps
-from bson import ObjectId
-from online_shopping.db import get_db
+# from pymongo import MongoClient
+# from bson.json_util import dumps
+# from bson import ObjectId
+# from online_shopping.db import get_db
 
 from online_shopping.db import get_db
 
@@ -81,7 +81,6 @@ def logout():
     return redirect(url_for('admin.login'))
 
 
-
 @bp.route('/products/')
 @login_required
 def admin_product():
@@ -98,7 +97,6 @@ def admin_warehouse():
     return render_template('admin/warehouses.html', inventories=invens)
 
 
-
 @bp.route('/quantities/')
 @login_required
 def admin_quantity():
@@ -111,9 +109,5 @@ def admin_quantity():
 @login_required
 def admin_orders():
     """get somethings from database """
-    orders = get_db().orders.find()
+    # orders = get_db().orders.find()
     return render_template("admin/orders.html")
-
-
-
-
