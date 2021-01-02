@@ -1,23 +1,29 @@
 {% extends 'blog/base.html' %}
 {%block body%}
-<div class="content">
+<div class="content m-3">
     {% for category in categories %}
-    <h2 class="{{ category }}">کالا های گروه {{ product.category }}</h2>
-    <div class="productsPart">
+        <div class="{{ category }} mx-4"><a class="text-decoration-none" href="">
+            <h1>کالا های گروه {{ product.category }}</h1></a></div>
+        <div class="card-group">
         {% for product in products if product.category == category %}
-            <div class="productCard">
-                <div class="content">
-                    <h3 class="productTitle">{{product.name}}</h3>
-                    <h2 class="productPrice">{{product.price}} تومان</h2>
-                </div>
+            <div class="card m-4 border border-primary rounded">
                 {% if product.image %}
-                <img src="{{product.image}}" alt="{{product.name}}">
+                <img class="card-img-top" src="{{product.image}}" alt="{{product.name}}">
                 {%else%}
-                <img src="{{product.image}}" alt="{{product.name}}">
+                <img class="card-img-top" src="" alt="{{product.name}}">
                 {%endif%}
+                <div class="card-body">
+                    <h5 class="card-title">{{product.name}}</h5>
+                    <p class="card-text">{{product.description}}</p>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <div><button type="button" class="btn btn-outline-primary" onclick="buyCounter()">خرید</button>
+                    </div>
+                    <div><small class="text-muted">{{product.price}} تومان</small></div>
+                </div>
             </div>
         {% endfor %}
-    </div>
+        </div>
     {% endfor %}
 </div>
 {%endblock%}
