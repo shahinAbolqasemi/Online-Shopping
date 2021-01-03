@@ -19,7 +19,7 @@
             <div class="col firstProduct" id="main">
                 <div class="m-3">
                     <div class="mx-4"><a href="">
-                        <h1>کالاهای گروه {{ category }}</h1>
+                        <h1>کالاهای گروه {{ category.name }}</h1>
                     </a></div>
                     <div class="card-group">
                         {% for product in products if product.category == category %}
