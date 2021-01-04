@@ -11,14 +11,12 @@ from flask import session
 from flask import url_for
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
+# from flaskr.db import get_db
 
-#from flaskr.db import get_db
-
-bp=Blueprint('store',__name__)
-
+bp = Blueprint('store', __name__)
 
 
-@bp.route('/')
+@bp.route('/', methods=["GET", "POST"])
 def index():
 
-    return render_template('index.html')
+    return render_template('blog/index.html')

@@ -22,13 +22,15 @@ def create_app(test_config=None):
 
     @app.route('/')
     def main():
-        return 'Main Page'
+        return render_template('blog/start.html')
 
     from online_shopping import db
     db.init_app(app)
 
     from online_shopping import admin
     from online_shopping import api
+    from online_shopping import store
+    app.register_blueprint(store.bp)
     app.register_blueprint(admin.bp)
     app.register_blueprint(api.bp)
 
