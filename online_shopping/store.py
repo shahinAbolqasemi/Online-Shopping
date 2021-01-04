@@ -13,7 +13,7 @@ from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 # from flaskr.db import get_db
 
-bp = Blueprint('store', __name__)
+bp = Blueprint('store', __name__, url_prefix="/store")
 
 
 @bp.route('/', methods=["GET", "POST"])
