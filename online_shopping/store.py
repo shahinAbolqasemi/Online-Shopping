@@ -9,6 +9,7 @@ from flask import Blueprint, current_app
 # from flask import g
 # from flask import redirect
 from flask import render_template
+
 # from flask import request
 # from flask import session
 # from flask import url_for
@@ -44,9 +45,13 @@ def get_category(full_category):
 def home():
     categories = get_categories()
     db = get_db
-    products = list(db.products.find())
-
-    return render_template('blog/index.html', categories=categories, products=products)
+    full_category = []
+    for cat in categories:
+        pro = list(db.products.find({'category': {'$regex': cat}}).sort({'$date': -1}))
+        full_category.append({'single_category': category.split('/')[0],
+                              'category': category,
+                              'products': pro})
+    return render_template('blog/index.html', categories=full_category)
 
 
 @bp.route("/category/<category_name>")

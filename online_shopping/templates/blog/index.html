@@ -2,11 +2,11 @@
 {% block body %}
     <div class="content m-3">
         {% for category in categories %}
-            <div class="{{ category }} mx-4"><a class="text-decoration-none"
-                                                href="{{ url_for(store.category, category_name=category) }}">
-                <h1>کالا های گروه {{ category }}</h1></a></div>
+            <div class="{{ category.single_category }} mx-4"><a class="text-decoration-none"
+                                                href="{{ url_for(store.category, category_name=category.category) }}">
+                <h1>کالا های گروه {{ category.single_category }}</h1></a></div>
             <div class="card-group">
-                {% for product in products if product.category == category %}
+                {% for product in category.products %}
                     <a href="{{ url_for('store.product', id=product.id) }}">
                         <div class="card m-4 border border-primary rounded">
                             {% if product.image %}
@@ -28,7 +28,7 @@
                         </div>
                     </a>
                 {% endfor %}
-            </div>
+            </div><br><br>
         {% endfor %}
     </div>
 {% endblock %}
