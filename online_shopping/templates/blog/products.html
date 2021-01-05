@@ -18,36 +18,34 @@
 
         <div class="col col-10">
             <div class="col firstProduct" id="main">
-                <div class="m-3">
-                    <div class="mx-4"><a href="">
-                        <h1>کالاهای گروه {{ cat }}</h1>
-                    </a></div>
-                    <div class="card-group">
-                        {% for item in page_category %}
-                            <a href="{{ url_for('store.product', id=item.id) }}">
-                                <div class="card m-4 border border-primary rounded">
-                                    {% if item.image %}
-                                        <img class="card-img-top" src="{{ item.image }}" alt="{{ item.name }}">
-                                    {% else %}
-                                        <img class="card-img-top" src="" alt="{{ item.name }}">
-                                    {% endif %}
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ item.name }}</h5>
-                                        <p class="card-text">{{ item.description }}</p>
-                                    </div>
-                                    <div class="card-footer d-flex justify-content-between">
-                                        <div>
-                                            <button type="button" class="btn btn-outline-primary"
-                                                    onclick="buyCounter()">
-                                                خرید
-                                            </button>
-                                        </div>
-                                        <div><small class="text-muted">{{ item.price }} تومان</small></div>
-                                    </div>
+                <div class="m-3 row">
+                    <div class="mx-4"><a href="{{ url_for('store.category', category_name=cat_category) }}"><h1>کالاهای
+                        گروه {{ cat }}</h1></a></div>
+                    {% for item in page_category %}
+                        <a href="{{ url_for('store.product', id=item.id) }}">
+                            <div class="card m-4 border border-primary rounded" style="width: 350px;">
+                                {% if item.image %}
+                                    <img class="card-img-top" src="{{ item.image }}" alt="{{ item.name }}">
+                                {% else %}
+                                    <img class="card-img-top" src="" alt="{{ item.name }}">
+                                {% endif %}
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ item.name }}</h5>
+                                    <p class="card-text">{{ item.description }}</p>
                                 </div>
-                            </a>
-                        {% endfor %}
-                    </div>
+                                <div class="card-footer d-flex justify-content-between">
+                                    <div>
+                                        <button type="button" class="btn btn-outline-primary"
+                                                onclick="buyCounter()">
+                                            خرید
+                                        </button>
+                                    </div>
+                                    <div><small class="text-muted">{{ item.price }} تومان</small></div>
+                                </div>
+                            </div>
+                        </a>
+                    {% endfor %}
+
                 </div>
             </div>
         </div>

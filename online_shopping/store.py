@@ -83,7 +83,8 @@ def category(category_name):
     page_category_name = category_name.split('/')[0]
     return render_template('blog/products.html', side_categories=side_cat_pro_name,
                            page_category=page_products,
-                           cat=page_category_name)
+                           cat=page_category_name,
+                           cat_category=category_name)
 
 
 @bp.route("/product/<id>")
