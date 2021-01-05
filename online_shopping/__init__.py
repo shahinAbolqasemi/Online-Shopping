@@ -1,8 +1,9 @@
-from flask import *
 import os
 import json
 
-from online_shopping.helpers import JSONEncoder
+from flask import Flask
+
+from online_shopping.util.json_encoders import JSONEncoder
 
 
 def create_app(test_config=None):
@@ -13,6 +14,10 @@ def create_app(test_config=None):
     else:
         app.config.update(test_config)
     app.json_encoder = JSONEncoder
+    from online_shopping.util.filters import format_currency, format_date_to_jalali
+    app.jinja_env.filters['format_currency'] = format_currency
+    app.jinja_env.filters['jalali_date'] = format_date_to_jalali
+
     # app.logger.debug('app.config = %s', app.config)
 
     # try:
