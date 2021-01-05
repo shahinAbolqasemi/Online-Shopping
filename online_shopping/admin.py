@@ -1,13 +1,12 @@
-from flask import *
 import functools
+
+from flask import (
+    Blueprint, session, url_for, current_app, request, flash, render_template, g
+)
+from werkzeug.utils import redirect
 from werkzeug.security import *
 import json
 from cryptography.fernet import Fernet
-from pymongo import MongoClient
-from bson.json_util import dumps
-from bson import ObjectId
-from online_shopping.db import get_db
-
 from online_shopping.db import get_db
 
 # CONST for validation of admin
@@ -20,6 +19,7 @@ bp = Blueprint('admin', __name__, url_prefix='/admin')
 
 def login_required(view):
     """View decorator that redirects anonymous users to the login page."""
+
     @functools.wraps(view)
     def wrapped_view(*args, **kwargs):
         if "admin" not in session:
@@ -81,7 +81,6 @@ def logout():
     return redirect(url_for('admin.login'))
 
 
-
 @bp.route('/products/')
 @login_required
 def admin_product():
@@ -94,9 +93,8 @@ def admin_product():
 @login_required
 def admin_warehouse():
     db = get_db()
-    invens = list(db.inventory.find())
-    return render_template('admin/warehouses.html', inventories=invens)
-
+    warehouses = db.warehouses.find()
+    return render_template('admin/warehouses.html', warehouses=warehouses)
 
 
 @bp.route('/quantities/')
@@ -112,8 +110,4 @@ def admin_quantity():
 def admin_orders():
     """get somethings from database """
     orders = get_db().orders.find()
-    return render_template("admin/orders.html")
-
-
-
-
+    return render_template("admin/orders.html", orders=orders)
