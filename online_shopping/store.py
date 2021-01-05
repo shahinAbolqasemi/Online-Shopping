@@ -4,11 +4,11 @@ from online_shopping.db import get_db
 
 # import psycopg2.extras
 
-from flask import Blueprint, current_app
+
 # from flask import flash
 # from flask import g
 # from flask import redirect
-from flask import render_template
+from flask import render_template, Blueprint
 
 # from flask import request
 # from flask import session
@@ -34,11 +34,6 @@ def get_categories():
             categories.append(group['name'])
 
     return categories
-
-
-def get_category(full_category):
-    category_name = full_category.split('/')
-    return category_name[0]
 
 
 @bp.route('/', methods=["GET", "POST"])
@@ -88,5 +83,7 @@ def category(category_name):
 
 
 @bp.route("/product/<id>")
-def product():
-    return render_template('blog/product.html')
+def product(id):
+    db = get_db
+    pro = list(db.products.find({'_id': id}))
+    return render_template('blog/product.html', product=pro)
