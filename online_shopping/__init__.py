@@ -20,9 +20,9 @@ def create_app(test_config=None):
     # except OSError:
     #     pass
 
-    @app.route('/')
-    def main():
-        return render_template('blog/start.html')
+    # @app.route('/')
+    # def main():
+    #     return render_template('blog/start.html')
 
     from online_shopping import db
     db.init_app(app)

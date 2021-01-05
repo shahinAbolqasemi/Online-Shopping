@@ -1,29 +1,34 @@
 {% extends 'blog/base.html' %}
-{%block body%}
-<div class="content m-3">
-    {% for category in categories %}
-        <div class="{{ category }} mx-4"><a class="text-decoration-none" href="">
-            <h1>کالا های گروه {{ product.category }}</h1></a></div>
-        <div class="card-group">
-        {% for product in products if product.category == category %}
-            <div class="card m-4 border border-primary rounded">
-                {% if product.image %}
-                <img class="card-img-top" src="{{product.image}}" alt="{{product.name}}">
-                {%else%}
-                <img class="card-img-top" src="" alt="{{product.name}}">
-                {%endif%}
-                <div class="card-body">
-                    <h5 class="card-title">{{product.name}}</h5>
-                    <p class="card-text">{{product.description}}</p>
-                </div>
-                <div class="card-footer d-flex justify-content-between">
-                    <div><button type="button" class="btn btn-outline-primary" onclick="buyCounter()">خرید</button>
-                    </div>
-                    <div><small class="text-muted">{{product.price}} تومان</small></div>
-                </div>
+{% block body %}
+    <div class="content m-3">
+        {% for category in categories %}
+            <div class="{{ category }} mx-4"><a class="text-decoration-none"
+                                                href="{{ url_for(store.category, category_name=category) }}">
+                <h1>کالا های گروه {{ category }}</h1></a></div>
+            <div class="card-group">
+                {% for product in products if product.category == category %}
+                    <a href="{{ url_for('store.product', id=product.id) }}">
+                        <div class="card m-4 border border-primary rounded">
+                            {% if product.image %}
+                                <img class="card-img-top" src="{{ product.image }}" alt="{{ product.name }}">
+                            {% else %}
+                                <img class="card-img-top" src="" alt="{{ product.name }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ product.name }}</h5>
+                                <p class="card-text">{{ product.description }}</p>
+                            </div>
+                            <div class="card-footer d-flex justify-content-between">
+                                <div>
+                                    <button type="button" class="btn btn-outline-primary" onclick="buyCounter()">خرید
+                                    </button>
+                                </div>
+                                <div><small class="text-muted">{{ product.price }} تومان</small></div>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
             </div>
         {% endfor %}
-        </div>
-    {% endfor %}
-</div>
-{%endblock%}
+    </div>
+{% endblock %}

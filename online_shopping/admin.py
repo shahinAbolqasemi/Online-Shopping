@@ -81,7 +81,6 @@ def logout():
     return redirect(url_for('admin.login'))
 
 
-
 @bp.route('/products/')
 @login_required
 def admin_product():
@@ -98,7 +97,6 @@ def admin_warehouse():
     return render_template('admin/warehouses.html', inventories=invens)
 
 
-
 @bp.route('/quantities/')
 @login_required
 def admin_quantity():
@@ -113,7 +111,3 @@ def admin_orders():
     """get somethings from database """
     orders = get_db().orders.find()
     return render_template("admin/orders.html")
-
-
-
-
