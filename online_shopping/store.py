@@ -47,16 +47,43 @@ def home():
     db = get_db
     full_category = []
     for cat in categories:
-        pro = list(db.products.find({'category': {'$regex': cat}}).sort({'$date': -1}))
+        pro = list(db.products.find({'category': {'$regex': cat}}, {'$orderby': {'date': -1}})).limit(5)
         full_category.append({'single_category': category.split('/')[0],
                               'category': category,
                               'products': pro})
     return render_template('blog/index.html', categories=full_category)
 
 
+def get_single_category(cat):
+    with open('categories.json') as f:
+        json_categories = json.load(f)
+
+    db = get_db
+    single_cat = cat.split('/')[-1].strip()
+    products = list(db.products.find({'category': {'$regex': cat}}))
+
+    categories_of_single = {}
+    for group in json_categories:
+        if group.subcategoies and group['name'] == single_cat:
+            for item in group.subcategoies:
+                categories_of_single[item['name']] = []
+
+    for thing in products:
+        thing_category = thing['category'].split('/')[0].strip()
+        categories_of_single[thing_category].append(thing)
+
+    return categories_of_single
+
+
 @bp.route("/category/<category_name>")
-def category():
-    return render_template('blog/products.html')
+def category(category_name):
+    db = get_db
+    side_cat_pro_name = get_single_category(category_name)
+    page_products = list(db.products.find({{'category': {'$regex': category_name}}, {'$orderby': {'date': -1}}}))
+    page_category_name = category_name.split('/')[0]
+    return render_template('blog/products.html', side_categories=side_cat_pro_name,
+                           page_category=page_products,
+                           cat=page_category_name)
 
 
 @bp.route("/product/<id>")

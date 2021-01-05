@@ -3,11 +3,12 @@
     <div class="row">
         <div class="col col-2 border border-dark border-bottom-0 border-top-0 border-right-0">
             <ul class="list-unstyled">
-                {% for category in categories %}
-                    <li class="{{ category }} mt-3"><a href="">first product</a>
+                {% for category, products in side_categories.items %}
+                    <li class="{{ category }} mt-3"><a
+                            href="{{ url_for('store.category', category_name=products0.category) }}">{{ category }}</a>
                         <ul>
-                            {% for product in products if product.category == category %}
-                                <li><a href="">{{ product }}</a></li>
+                            {% for product in products %}
+                                <li><a href="{{ url_for('store.product', id=product.id) }}">{{ product.name }}</a></li>
                             {% endfor %}
                         </ul>
                     </li>
@@ -19,29 +20,32 @@
             <div class="col firstProduct" id="main">
                 <div class="m-3">
                     <div class="mx-4"><a href="">
-                        <h1>کالاهای گروه {{ category.name }}</h1>
+                        <h1>کالاهای گروه {{ cat }}</h1>
                     </a></div>
                     <div class="card-group">
-                        {% for product in products if product.category == category %}
-                            <div class="card m-4 border border-primary rounded">
-                                {% if product.image %}
-                                    <img class="card-img-top" src="{{ product.image }}" alt="{{ product.name }}">
-                                {% else %}
-                                    <img class="card-img-top" src="" alt="{{ product.name }}">
-                                {% endif %}
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ product.name }}</h5>
-                                    <p class="card-text">{{ product.description }}</p>
-                                </div>
-                                <div class="card-footer d-flex justify-content-between">
-                                    <div>
-                                        <button type="button" class="btn btn-outline-primary" onclick="buyCounter()">
-                                            خرید
-                                        </button>
+                        {% for item in page_category %}
+                            <a href="{{ url_for('store.product', id=item.id) }}">
+                                <div class="card m-4 border border-primary rounded">
+                                    {% if item.image %}
+                                        <img class="card-img-top" src="{{ item.image }}" alt="{{ item.name }}">
+                                    {% else %}
+                                        <img class="card-img-top" src="" alt="{{ item.name }}">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ item.name }}</h5>
+                                        <p class="card-text">{{ item.description }}</p>
                                     </div>
-                                    <div><small class="text-muted">{{ product.price }} تومان</small></div>
+                                    <div class="card-footer d-flex justify-content-between">
+                                        <div>
+                                            <button type="button" class="btn btn-outline-primary"
+                                                    onclick="buyCounter()">
+                                                خرید
+                                            </button>
+                                        </div>
+                                        <div><small class="text-muted">{{ item.price }} تومان</small></div>
+                                    </div>
                                 </div>
-                            </div>
+                            </a>
                         {% endfor %}
                     </div>
                 </div>
