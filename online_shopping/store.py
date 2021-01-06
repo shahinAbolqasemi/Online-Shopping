@@ -42,7 +42,8 @@ def home():
     db = get_db()
     full_category = []
     for cat in categories:
-        pro = list(db.products.find({'category': {'$regex': cat}}, {'$orderby': {'date': -1}}).limit(5))
+        # pro = list(db.products.find({'category': {'$regex': cat}}, {'$orderby': {'date': -1}}).limit(5))
+        pro = list(db.products.find({'category': {'$regex': cat}}).sort({'date', -1}).limit(5))
         full_category.append({'single_category': category.split('/')[0],
                               'category': cat,
                               'products': pro})
