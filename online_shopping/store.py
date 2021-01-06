@@ -2,6 +2,8 @@
 import json
 
 import pymongo
+from bson import ObjectId
+from pymongo import MongoClient
 
 from online_shopping.db import get_db
 
@@ -32,7 +34,7 @@ def get_categories():
     for group in json_categories:
         if group['subcategories']:
             for item in group['subcategories']:
-                categories.append(group['name'] + ' / ' + item['name'])
+                categories.append(group['name'] + '/' + item['name'])
         else:
             categories.append(group['name'])
 
@@ -42,10 +44,10 @@ def get_categories():
 @bp.route('/', methods=["GET", "POST"])
 def home():
     categories = get_categories()
+    client = MongoClient('localhost', 27017)
     db = get_db()
     full_category = []
     for cat in categories:
-        # pro = list(db.products.find({'category': {'$regex': cat}}, {'$orderby': {'date': -1}}).limit(5))
         pro = list(db.products.find({'category': {'$regex': cat}}).sort("date", pymongo.DESCENDING).limit(4))
         full_category.append({'single_category': cat.split('/')[-1],
                               'category': cat,
@@ -55,11 +57,12 @@ def home():
 
 
 def get_single_category(cat):
-    with open('categories.json', encoding='utf-8') as f:
-        json_categories = json.load(f)
 
-    db = get_db
-    single_cat = cat.split('/')[-1].strip()
+    with open('instance/categories.json', encoding='utf-8') as f:
+        json_categories = json.load(f)
+    client = MongoClient('localhost', 27017)
+    db = client.online_shopping
+    single_cat = cat.split('/')[0]
     products = list(db.products.find({'category': {'$regex': cat}}))
 
     categories_of_single = {}
@@ -69,7 +72,7 @@ def get_single_category(cat):
                 categories_of_single[item['name']] = []
 
     for thing in products:
-        thing_category = thing['category'].split('/')[0].strip()
+        thing_category = thing['category'].split('/')[-1]
         categories_of_single[thing_category].append(thing)
 
     return categories_of_single
@@ -77,9 +80,10 @@ def get_single_category(cat):
 
 @bp.route("/category/<category_name>")
 def category(category_name):
-    db = get_db
+    client = MongoClient('localhost', 27017)
+    db = client.online_shopping
     side_cat_pro_name = get_single_category(category_name)
-    page_products = list(db.products.find({{'category': {'$regex': category_name}}, {'$orderby': {'date': -1}}}))
+    page_products = list(db.products.find({{'category': {'$regex': category_name}}}).sort("date", pymongo.DESCENDING))
     page_category_name = category_name.split('/')[0]
     return render_template('blog/products.html', side_categories=side_cat_pro_name,
                            page_category=page_products,
@@ -87,15 +91,17 @@ def category(category_name):
                            cat_category=category_name)
 
 
-@bp.route("/product/<id>")
+@bp.route("/product/<id>", methods=["GET", "POST"])
 def product(id):
-    db = get_db
-    pro = list(db.products.find({'_id': id}))
+    client = MongoClient('localhost', 27017)
+    db = client.online_shopping
+    pro = db.products.find({'_id': ObjectId(id)})
     return render_template('blog/product.html', product=pro)
 
 
 @bp.route("/cart")
 def cart():
-    db = get_db
+    client = MongoClient('localhost', 27017)
+    db = client.online_shopping
     pro = list(db.products.find())
     return render_template('blog/cart.html', product=pro)
