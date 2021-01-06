@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 
 from online_shopping.admin import login_required
 from online_shopping.db import get_db
-from online_shopping.helpers import JSONEncoder
 
 bp = Blueprint('api', __name__, url_prefix='/api')
 
