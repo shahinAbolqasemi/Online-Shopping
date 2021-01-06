@@ -9,15 +9,17 @@
             <th></th>
         </tr>
     </thead>
-    {% for inventory in inventories %}
+    {% for warehouse in warehouses %}
     <tbody>
         <tr>
-            <td>{{ inventory.name }}</td>
+            <td>{{ warehouse.name }}</td>
             <td><a href="#">ویرایش</a><a href="#"> حذف</a> </td>
         </tr>
     </tbody>
     {% endfor %}
 </table>
+<!-- Modal -->
+
 {% endblock %}
 {% block script %}
 {{ super() }}
