@@ -21,7 +21,7 @@
         <tr>
             <td>{{ order.customerFirstName }} {{ order.customerLastName }}</td>
             <td>{{ order.amount | format_currency }}</td>
-            <td>{{ order.date | jalali_date }}</td>
+            <td>{{ order.date | jalali_date("%Y/%m/%d") }}</td>
             <td><a class="order-check" data-product-id="{{ order._id }}" href="#">بررسی سفارش</a></td>
         </tr>
     {% endfor %}
