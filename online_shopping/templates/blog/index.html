@@ -3,7 +3,7 @@
     <div class="content m-3 row">
         {% for category in categories %}
             <div class="{{ category.single_category }} mx-4"><a class="text-decoration-none"
-                                                                href="{{ url_for(store.category, category_name=category.category) }}">
+                                                                href="{{ url_for('store.category', category_name=category.category) }}">
                 <h1>کالا های گروه {{ category.single_category }}</h1></a></div>
             {% for product in category.products %}
                 <a href="{{ url_for('store.product', id=product.id) }}">

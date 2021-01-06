@@ -1,5 +1,8 @@
 # import functools
 import json
+
+import pymongo
+
 from online_shopping.db import get_db
 
 # import psycopg2.extras
@@ -43,8 +46,8 @@ def home():
     full_category = []
     for cat in categories:
         # pro = list(db.products.find({'category': {'$regex': cat}}, {'$orderby': {'date': -1}}).limit(5))
-        pro = list(db.products.find({'category': {'$regex': cat}}).sort({'date', -1}).limit(5))
-        full_category.append({'single_category': category.split('/')[0],
+        pro = list(db.products.find({'category': {'$regex': cat}}).sort("date", pymongo.DESCENDING).limit(4))
+        full_category.append({'single_category': cat.split('/')[0],
                               'category': cat,
                               'products': pro})
     return render_template('blog/index.html', categories=full_category)
