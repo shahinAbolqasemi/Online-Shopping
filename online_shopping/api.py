@@ -1,5 +1,7 @@
+from datetime import datetime
+
 from bson import ObjectId
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, current_app
 
 from online_shopping.admin import login_required
 from online_shopping.db import get_db
@@ -33,6 +35,7 @@ def prod_add():
         'name': request.form.get('prod-name'),
         'description': request.form.get('prod-desc'),
         'category': request.form.get('prod-category'),
+        'date': current_app.config['TEHRAN_TZ'].localize(datetime.now()),
         'image': request.form.get('prod-image'),
         'warehouses': request.form.get('prod-warehouses')
     }
