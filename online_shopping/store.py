@@ -87,3 +87,10 @@ def product(id):
     db = get_db
     pro = list(db.products.find({'_id': id}))
     return render_template('blog/product.html', product=pro)
+
+
+@bp.route("/cart")
+def cart():
+    db = get_db
+    pro = list(db.products.find())
+    return render_template('blog/cart.html', product=pro)
