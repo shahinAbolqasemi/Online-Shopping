@@ -24,7 +24,7 @@ bp = Blueprint('store', __name__)
 
 
 def get_categories():
-    with open('instance/categories.json') as f:
+    with open('instance/categories.json',encoding='utf-8') as f:
         json_categories = json.load(f)
 
     categories = []
@@ -32,7 +32,7 @@ def get_categories():
     for group in json_categories:
         if group['subcategories']:
             for item in group['subcategories']:
-                categories.append(group['name'] + '/' + item['name'])
+                categories.append(group['name'] + ' / ' + item['name'])
         else:
             categories.append(group['name'])
 
@@ -47,14 +47,15 @@ def home():
     for cat in categories:
         # pro = list(db.products.find({'category': {'$regex': cat}}, {'$orderby': {'date': -1}}).limit(5))
         pro = list(db.products.find({'category': {'$regex': cat}}).sort("date", pymongo.DESCENDING).limit(4))
-        full_category.append({'single_category': cat.split('/')[0],
+        full_category.append({'single_category': cat.split('/')[-1],
                               'category': cat,
                               'products': pro})
+
     return render_template('blog/index.html', categories=full_category)
 
 
 def get_single_category(cat):
-    with open('categories.json') as f:
+    with open('categories.json', encoding='utf-8') as f:
         json_categories = json.load(f)
 
     db = get_db
