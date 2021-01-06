@@ -29,7 +29,7 @@ def get_categories():
     for group in json_categories:
         if group['subcategories']:
             for item in group['subcategories']:
-                categories.append(group['name'] + ' / ' + item['name'])
+                categories.append(group['name'] + '/' + item['name'])
         else:
             categories.append(group['name'])
 
@@ -42,9 +42,9 @@ def home():
     db = get_db()
     full_category = []
     for cat in categories:
-        pro = list(db.products.find({'category': {'$regex': cat}}, {'$orderby': {'date': -1}})).limit(5)
+        pro = list(db.products.find({'category': {'$regex': cat}}, {'$orderby': {'date': -1}}).limit(5))
         full_category.append({'single_category': category.split('/')[0],
-                              'category': category,
+                              'category': cat,
                               'products': pro})
     return render_template('blog/index.html', categories=full_category)
 
