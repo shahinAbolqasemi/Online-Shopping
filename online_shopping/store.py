@@ -21,14 +21,14 @@ bp = Blueprint('store', __name__)
 
 
 def get_categories():
-    with open('categories.json') as f:
+    with open('instance/categories.json') as f:
         json_categories = json.load(f)
 
     categories = []
 
     for group in json_categories:
-        if group.subcategoies:
-            for item in group.subcategoies:
+        if group['subcategories']:
+            for item in group['subcategories']:
                 categories.append(group['name'] + ' / ' + item['name'])
         else:
             categories.append(group['name'])
@@ -39,7 +39,7 @@ def get_categories():
 @bp.route('/', methods=["GET", "POST"])
 def home():
     categories = get_categories()
-    db = get_db
+    db = get_db()
     full_category = []
     for cat in categories:
         pro = list(db.products.find({'category': {'$regex': cat}}, {'$orderby': {'date': -1}})).limit(5)
@@ -59,8 +59,8 @@ def get_single_category(cat):
 
     categories_of_single = {}
     for group in json_categories:
-        if group.subcategoies and group['name'] == single_cat:
-            for item in group.subcategoies:
+        if group['subcategories'] and group['name'] == single_cat:
+            for item in group['subcategories']:
                 categories_of_single[item['name']] = []
 
     for thing in products:
