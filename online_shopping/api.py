@@ -1,3 +1,4 @@
+from bson import ObjectId
 from flask import Blueprint, request, jsonify
 
 from online_shopping.admin import login_required
@@ -14,20 +15,33 @@ def load_():
 @bp.route('/product/list/')
 @login_required
 def prod_list():
-    products = list(get_db().products.find())
+    products = list(get_db('products').find())
     return jsonify(products)
 
 
-@bp.route('/product/<int:product_id>/')
+@bp.route('/product/<product_id>/')
 @login_required
 def prod_details(product_id):
-    return ...
+    product = get_db('products').find_one({'_id': ObjectId(product_id)})
+    return jsonify(product)
 
 
 @bp.route('/product/add/', methods=['POST'])
 @login_required
 def prod_add():
-    return ...
+    product_document = {
+        'name': request.form.get('prod-name'),
+        'description': request.form.get('prod-desc'),
+        'category': request.form.get('prod-category'),
+        'image': request.form.get('prod-image'),
+        'warehouses': request.form.get('prod-warehouses')
+    }
+    try:
+        get_db('products').insert_one(product_document)
+    except (Exception) as ex:
+        return jsonify({'status': False})
+    else:
+        return jsonify({'status': True})
 
 
 @bp.route('/product/edit/', methods=['POST'])
@@ -101,11 +115,12 @@ def quantity_delete():
 @bp.route('/order/list/')
 @login_required
 def order_list():
-    orders = list(get_db().orders.find())
+    orders = list(get_db('orders').find())
     return jsonify(orders)
 
 
-@bp.route('/order/<int:order_id>/')
+@bp.route('/order/<order_id>/')
 @login_required
 def order_details(order_id):
-    return ...
+    order = get_db('orders').find_one({'_id': ObjectId(order_id)})
+    return jsonify(order)
