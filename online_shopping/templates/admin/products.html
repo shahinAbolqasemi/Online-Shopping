@@ -1,5 +1,13 @@
 {% extends 'admin/base.html' %}
 {% block content %}
+<h2 class="mb-3 mt-4">مدیریت کالا ها</h2>
+<div class="my-3 text-right">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">افزودن کالا</button>
+    <label class="btn btn-primary" for="my-file-selector">
+    <input id="my-file-selector" type="file" class="d-none">
+    import
+</label>
+</div>
 <table class="col table table-striped mt-4">
     <thead>
         <tr>
@@ -18,14 +26,65 @@
     {% for product in products %}
     <tbody>
         <tr>
-            <td>{{ product.image }}</td>
+            <td><img src="{{ product.image }}" width="75px" height="75px"></td>
             <td>{{ product.name }}</td>
             <td>{{ product.category }}</td>
-            <td><a href="#">ویرایش</a><a href="#"> حذف</a> </td>
+            <td><button type="button" id="editProduct" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal">ویرایش</button>
+             <button type="button" id="deleteProduct" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#deleteModal">حذف</button></td>
         </tr>
     </tbody>
     {% endfor %}
 </table>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">افزودن/ویرایش کالا</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="productName" class="form-label">نام کالا</label>
+            <input type="text" class="form-control" id="productName">
+              <label for="category" class="form-label">دسته بندی</label>
+              <select class="form-select" aria-label="Default select example">
+                  <option selected>انتخاب دسته</option>
+                  <option value="1">دسته 1</option>
+                  <option value="2">دسته 2</option>
+                  <option value="3">دسته 3</option>
+              </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+        <button type="button" class="btn btn-primary" id="saveBtn">ذخیره</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">حذف کالا</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>کالا حذف شود?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">خیر</button>
+        <button type="button" class="btn btn-primary">بله</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block script %}
 {{ super() }}
