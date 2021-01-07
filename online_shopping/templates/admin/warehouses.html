@@ -1,5 +1,9 @@
 {% extends 'admin/base.html' %}
 {% block content %}
+<h2 class="mt-5">مدیریت انبار ها</h2>
+<div class="mb-3 text-right">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">افزودن انبار</button>
+</div>
 <table class="col table table-striped mt-4">
     <thead>
         <tr>
@@ -13,13 +17,53 @@
     <tbody>
         <tr>
             <td>{{ warehouse.name }}</td>
-            <td><a href="#">ویرایش</a><a href="#"> حذف</a> </td>
+            <td><button type="button" id="editWarehouse" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal">ویرایش</button>
+             <button type="button" id="deleteWarehouse" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#deleteModal">حذف</button></td>
         </tr>
     </tbody>
     {% endfor %}
 </table>
 <!-- Modal -->
-
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">افزودن/ویرایش انبار</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="warehouseName" class="form-label">نام انبار</label>
+            <input type="text" class="form-control" id="warehouseName">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+        <button type="button" class="btn btn-primary" id="saveBtn">ذخیره</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">حذف انبار</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>انبار حذف شود?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">خیر</button>
+        <button type="button" class="btn btn-primary">بله</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}
 {% block script %}
 {{ super() }}
