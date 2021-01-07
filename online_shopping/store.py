@@ -13,7 +13,7 @@ from online_shopping.db import get_db
 # from flask import flash
 # from flask import g
 # from flask import redirect
-from flask import render_template, Blueprint
+from flask import render_template, Blueprint, session
 
 # from flask import request
 # from flask import session
@@ -26,7 +26,7 @@ bp = Blueprint('store', __name__)
 
 
 def get_categories():
-    with open('instance/categories.json',encoding='utf-8') as f:
+    with open('instance/categories.json', encoding='utf-8') as f:
         json_categories = json.load(f)
 
     categories = []
@@ -44,7 +44,7 @@ def get_categories():
 @bp.route('/', methods=["GET", "POST"])
 def home():
     categories = get_categories()
-    client = MongoClient('localhost', 27017)
+    # client = MongoClient('localhost', 27017)
     db = get_db()
     full_category = []
     for cat in categories:
@@ -91,17 +91,19 @@ def category(category_name):
                            cat_category=category_name)
 
 
-@bp.route("/product/<id>", methods=["GET", "POST"])
-def product(id):
+@bp.route("/product/<product_id>", methods=["GET", "POST"])
+def product(product_id):
     client = MongoClient('localhost', 27017)
     db = client.online_shopping
-    pro = db.products.find({'_id': ObjectId(id)})
+    pro = db.products.find({'_id': ObjectId(product_id)})
     return render_template('blog/product.html', product=pro)
 
 
-@bp.route("/cart")
-def cart():
-    client = MongoClient('localhost', 27017)
-    db = client.online_shopping
-    pro = list(db.products.find())
-    return render_template('blog/cart.html', product=pro)
+@bp.route("/cart/<product_id")
+def cart(product_id):
+    if product_id is None:
+        return render_template('blog/cart.html', product=session["product_list"])
+    else:
+        for item in session['product_list']:
+            if session['product_list'][item][product_id] == product_id:
+                session['product_list'].remove(item)

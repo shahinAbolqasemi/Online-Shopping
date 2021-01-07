@@ -1,7 +1,7 @@
 {% extends "blog/base.html" %}
 {% block body %}
     <div class="d-flex flex-column p-5">
-        <h4>shopping cart</h4><br><br>
+        <h4>سبد خرید</h4><br><br>
         <div class="d-flex justify-content-center">
             <div class="col-8">
                 <table class="table table-striped">
@@ -15,11 +15,12 @@
                         </tr>
                     </thead>
                     <tbody>
+                    {% for product in products %}
                         <tr>
-                            <th><a href="#">the soecial organism</a></th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td><a href="#">1</a></td>
+                            <th><a href="{{ url_for('store.product', product_id=product.id) }}">{{ product.name }}</a></th>
+                            <td>{{ product.price}}</td>
+                            <td>{{ product.quantity }}</td>
+                            <td><a class="text-decoration-none" href="{{ url_for('store.cart', product_id=product.id) }}">حذف</a></td>
                         </tr>
                     </tbody>
                 </table>
