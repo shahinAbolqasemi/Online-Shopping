@@ -1,9 +1,9 @@
 # import functools
 import json
 
-import pymongo
+# import pymongo
 from bson import ObjectId
-from pymongo import MongoClient
+# from pymongo import MongoClient
 
 from online_shopping.db import get_db
 
@@ -130,11 +130,62 @@ def category(category_name):
                            category_single=page_category_name)
 
 
+def get_product(product_id):
+    db = get_db()
+    return db.products.aggregate([
+        {
+            '$match': {
+                '_id': ObjectId(product_id)
+            }
+        }, {
+            '$unwind': {
+                'path': '$warehouses',
+                'preserveNullAndEmptyArrays': True
+            }
+        }, {
+            '$match': {
+                'warehouses.quantity': {
+                    '$gt': 0
+                }
+            }
+        }, {
+            '$sort': {
+                'warehouses.price': 1
+            }
+        }, {
+            '$limit': 1
+        }, {
+            '$group': {
+                '_id': '$_id',
+                'name': {
+                    '$first': '$name'
+                },
+                'description': {
+                    '$first': '$description'
+                },
+                'category': {
+                    '$first': '$category'
+                },
+                'image': {
+                    '$first': '$image'
+                },
+                'warehouse_name': {
+                    '$first': '$warehouses.name'
+                },
+                'price': {
+                    '$first': '$warehouses.price'
+                },
+                'quantity': {
+                    '$first': '$warehouses.quantity'
+                }
+            }
+        }
+    ])
+
+
 @bp.route("/product/<product_id>", methods=["GET", "POST"])
 def product(product_id):
-    client = MongoClient('localhost', 27017)
-    db = client.online_shopping
-    pro = db.products.find({'_id': ObjectId(product_id)})
+    pro = get_product(product_id)
     return render_template('blog/product.html', product=pro)
 
 
