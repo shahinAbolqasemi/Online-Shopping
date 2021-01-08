@@ -25,8 +25,8 @@
                     </tbody>
                 </table>
                 <div class="row justify-content-between">
-                    <div class="col-4 d-inline-flex"><h3>جمع:</h3><h4 class="mx-4">1.035.500</h4></div>
-                    <div class="col col-3"><button type="button" class="btn btn-success w-100">Primary</button></div>
+                    <div class="col-4 d-inline-flex"><h3>جمع:</h3><h4 class="mx-4">{{ sum_orders }}</h4></div>
+                    <div class="col col-3"><button type="button" class="btn btn-success w-100"><a href="{{ url_for('store.checkout') }}"></a></button></div>
                 </div>
             </div>
         </div>

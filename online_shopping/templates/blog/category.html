@@ -5,7 +5,7 @@
             <ul class="list-unstyled">
                 {% for category, products in side_categories.items %}
                     <li class="{{ category }} mt-3"><a
-                            href="{{ url_for('store.category', category_name=products0.category) }}">{{ category }}</a>
+                            href="{{ url_for('store.category', category_name=products.0.category) }}">{{ category }}</a>
                         <ul>
                             {% for product in products %}
                                 <li><a href="{{ url_for('store.product', id=product.id) }}">{{ product.name }}</a></li>
@@ -19,8 +19,8 @@
         <div class="col col-10">
             <div class="col firstProduct" id="main">
                 <div class="m-3 row">
-                    <div class="mx-4"><a href="{{ url_for('store.category', category_name=cat_category) }}"><h1>کالاهای
-                        گروه {{ cat }}</h1></a></div>
+                    <div class="mx-4"><h1>کالاهای
+                        گروه {{ category_single }}</h1></div>
                     {% for item in page_category %}
                         <a href="{{ url_for('store.product', id=item.id) }}">
                             <div class="card m-4 border border-primary rounded" style="width: 350px;">
@@ -31,21 +31,13 @@
                                 {% endif %}
                                 <div class="card-body">
                                     <h5 class="card-title">{{ item.name }}</h5>
-                                    <p class="card-text">{{ item.description }}</p>
                                 </div>
                                 <div class="card-footer d-flex justify-content-between">
-                                    <div>
-                                        <button type="button" class="btn btn-outline-primary"
-                                                onclick="buyCounter()">
-                                            خرید
-                                        </button>
-                                    </div>
                                     <div><small class="text-muted">{{ item.price }} تومان</small></div>
                                 </div>
                             </div>
                         </a>
                     {% endfor %}
-
                 </div>
             </div>
         </div>

@@ -41,29 +41,71 @@ def get_categories():
     return categories
 
 
+def get_products_by_category(cat):
+    db = get_db()
+    return db.products.aggregate([
+        {
+            '$unwind': {
+                'path': '$warehouses',
+                'preserveNullAndEmptyArrays': True
+            }
+        }, {
+            '$match': {
+                'warehouses.quantity': {
+                    '$gt': 0
+                },
+                'category': {
+                    '$regex': cat
+                }
+            }
+        }, {
+            '$group': {
+                '_id': '$_id',
+                'name': {
+                    '$first': '$name'
+                },
+                'price': {
+                    '$min': '$warehouses.price'
+                },
+                'category': {
+                    '$first': '$category'
+                },
+                'description': {
+                    '$first': '$description'
+                },
+                'image': {
+                    '$first': '$image'
+                },
+                'date': {
+                    '$first': '$date'
+                }
+            }
+        }, {
+            '$sort': {
+                'date': -1
+            }
+        }
+    ])
+
+
 @bp.route('/', methods=["GET", "POST"])
 def home():
     categories = get_categories()
-    # client = MongoClient('localhost', 27017)
-    db = get_db()
     full_category = []
     for cat in categories:
-        pro = list(db.products.find({'category': {'$regex': cat}}).sort("date", pymongo.DESCENDING).limit(4))
+        pro = list(get_products_by_category(cat).limit(4))
         full_category.append({'single_category': cat.split('/')[-1],
                               'category': cat,
                               'products': pro})
 
-    return render_template('blog/index.html', categories=full_category)
+    return render_template('blog/home.html', categories=full_category)
 
 
 def get_single_category(cat):
-
     with open('instance/categories.json', encoding='utf-8') as f:
         json_categories = json.load(f)
-    client = MongoClient('localhost', 27017)
-    db = client.online_shopping
     single_cat = cat.split('/')[0]
-    products = list(db.products.find({'category': {'$regex': cat}}))
+    products = list(get_products_by_category(single_cat))
 
     categories_of_single = {}
     for group in json_categories:
@@ -80,15 +122,12 @@ def get_single_category(cat):
 
 @bp.route("/category/<category_name>")
 def category(category_name):
-    client = MongoClient('localhost', 27017)
-    db = client.online_shopping
     side_cat_pro_name = get_single_category(category_name)
-    page_products = list(db.products.find({{'category': {'$regex': category_name}}}).sort("date", pymongo.DESCENDING))
-    page_category_name = category_name.split('/')[0]
-    return render_template('blog/products.html', side_categories=side_cat_pro_name,
-                           page_category=page_products,
-                           cat=page_category_name,
-                           cat_category=category_name)
+    page_products = list(get_products_by_category(category_name))
+    page_category_name = category_name.split('/')[-1]
+    return render_template('blog/category.html', side_categories=side_cat_pro_name,
+                           page_products=page_products,
+                           category_single=page_category_name)
 
 
 @bp.route("/product/<product_id>", methods=["GET", "POST"])
@@ -102,8 +141,14 @@ def product(product_id):
 @bp.route("/cart/<product_id")
 def cart(product_id):
     if product_id is None:
-        return render_template('blog/cart.html', product=session["product_list"])
+        return render_template('blog/cart.html', product=session["order_products"])
     else:
-        for item in session['product_list']:
-            if session['product_list'][item][product_id] == product_id:
-                session['product_list'].remove(item)
+        for item in session['order_products']:
+            if session['order_products'][item][product_id] == product_id:
+                session['order_products'].remove(item)
+        return render_template('blog/cart.html', product=session["order_products"])
+
+
+@bp.route("/cart/<orders")
+def checkout(orders):
+    return render_template('blog/checkout.html', prosucts=orders)
