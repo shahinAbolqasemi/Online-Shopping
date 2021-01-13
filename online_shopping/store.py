@@ -189,20 +189,33 @@ def add_order():
     session["order_products"].append(data)
     session.modified = True
     num = len(session["order_products"])
-    return jsonify({'number': num})
+    return jsonify({'badge_number': num})
 
 
-@bp.route("/cart/<product_id>")
-def cart(product_id):
-    if product_id is None:
-        return render_template('blog/cart.html', product=session["order_products"])
+@bp.route("/cart")
+def cart():
+    orders = []
+    if 'order_products' not in session:
+        session['order_products'] = {}
     else:
         for item in session['order_products']:
-            if session['order_products'][item][product_id] == product_id:
-                session['order_products'].remove(item)
-        return render_template('blog/cart.html', product=session["order_products"])
+            orders.append({"product": get_product(item["id"]), "numbers": item["numbers"]})
+    total_price = sum(order["product"]['price'] * order['number'] for order in orders)
+    return render_template('blog/cart.html', orders=orders, total_price=total_price)
 
 
-@bp.route("/cart/<orders>")
-def checkout(orders):
-    return render_template('blog/checkout.html', prosucts=orders)
+@bp.route("/delete_order_product", methods=['POST'])
+def add_order():
+    data = request.get_json()
+    for item in session["order_products"]:
+        if data['id'] in item:
+            del session["order_products"][item]
+            session.modified = True
+            num = len(session["order_products"])
+            return jsonify({'badge_number': num, 'status': 'success'})
+    return jsonify({'status': 'success'})
+
+
+@bp.route("/cart/approve")
+def cart_approve():
+    return render_template('blog/cart_approve.html', prosucts=orders)
