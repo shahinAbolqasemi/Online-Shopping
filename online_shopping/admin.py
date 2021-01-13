@@ -74,6 +74,20 @@ def login():
 
     return render_template('admin/login.html')
 
+def get_categories():
+    with open('online_shopping/categories.json') as f:
+        categories = json.load(f)
+
+    categories_list = []
+
+    for category in categories:
+        if category['subcategories']:
+            for sub in category['subcategories']:
+                categories_list.append(category['name'] + ' / ' + sub['name'])
+        else:
+            categories_list.append(category['name'])
+
+    return categories_list
 
 @bp.route('/logout/')
 def logout():
@@ -86,14 +100,15 @@ def logout():
 def admin_product():
     db = get_db()
     prods = list(db.products.find())
-    return render_template('admin/products.html', products=prods)
+    categories = get_categories()
+    return render_template('admin/products.html', products=prods, categories=categories)
 
 
 @bp.route('/warehouses/')
 @login_required
 def admin_warehouse():
     db = get_db()
-    warehouses = db.products.find()[0]['warehouses']
+    warehouses = db.warehouses.find()
     return render_template('admin/warehouses.html', warehouses=warehouses)
 
 
@@ -102,7 +117,8 @@ def admin_warehouse():
 def admin_quantity():
     db = get_db()
     prods = list(db.products.find())
-    return render_template('admin/quantities.html', products=prods)
+    warehouses = db.warehouses.find()
+    return render_template('admin/quantities.html', products=prods, warehouses=warehouses)
 
 
 @bp.route('/orders/')
