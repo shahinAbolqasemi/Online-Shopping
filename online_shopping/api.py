@@ -1,7 +1,9 @@
+import os
 from datetime import datetime
 
 from bson import ObjectId
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, url_for
+from werkzeug.utils import secure_filename, redirect
 
 from online_shopping.admin import login_required
 from online_shopping.db import get_db
@@ -31,13 +33,20 @@ def prod_details(product_id):
 @bp.route('/product/add/', methods=['POST'])
 @login_required
 def prod_add():
+    image_file = request.files.get('prod-image')
+    if image_file:
+        filename = secure_filename(image_file.filename)
+        image_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+        image_url = url_for('uploads', filename=filename)
+    else:
+        image_url = url_for('uploads', filename='default_product_image.jpg')
+
     product_document = {
         'name': request.form.get('prod-name'),
         'description': request.form.get('prod-desc'),
         'category': request.form.get('prod-category'),
         'date': current_app.config['TEHRAN_TZ'].localize(datetime.now()),
-        'image': request.form.get('prod-image'),
-        'warehouses': request.form.get('prod-warehouses')
+        'image': image_url
     }
     try:
         get_db('products').insert_one(product_document)
@@ -125,5 +134,27 @@ def order_list():
 @bp.route('/order/<order_id>/')
 @login_required
 def order_details(order_id):
-    order = get_db('orders').find_one({'_id': ObjectId(order_id)})
-    return jsonify(order)
+    order = get_db('orders').find_one({'_id': ObjectId(order_id)}, {'_id': 0})
+    # aggregate(
+    #     [
+    #         {
+    #             '$match': {'_id': ObjectId(order_id)}
+    #         },
+    #         {
+    #             '$lookup': {
+    #                 'from': 'products',
+    #                 'localField': 'purchasedProductsId',
+    #                 'foreignField': '_id',
+    #                 'as': 'purchasedProductsId'
+    #             }
+    #         },
+    #         {
+    #             '$project': {
+    #                 '_id': 0
+    #             }
+    #         }
+    #     ]
+    # )
+    data = order
+    # data['']
+    return jsonify(data=order)
