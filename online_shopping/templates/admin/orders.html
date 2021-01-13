@@ -22,7 +22,12 @@
             <td>{{ order.customerFirstName }} {{ order.customerLastName }}</td>
             <td>{{ order.amount | format_currency }}</td>
             <td>{{ order.date | jalali_date("%Y/%m/%d") }}</td>
-            <td><a class="order-check" data-order-id="{{ order._id }}" href="#">بررسی سفارش</a></td>
+            <td>
+                <button type="button" class="order-check btn btn-link btn-sm" data-order-id="{{ order._id }}">
+                    <span class="order-check-text">بررسی سفارش</span>
+                    <span class="visually-hidden spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                </button>
+            </td>
         </tr>
     {% endfor %}
     </tbody>
@@ -69,7 +74,6 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
 {% block script %}
 {{ super() }}

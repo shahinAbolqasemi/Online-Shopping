@@ -1,10 +1,17 @@
 var $modal = $("#order-check-modal");
-$("a.order-check").click(function (e) {
+var $orderCheckButtons = $("button.order-check")
+$orderCheckButtons.click(function (e) {
     e.preventDefault();
-    var orderId = $(this).attr('data-order-id')
+    var $this = $(this)
+    var $orderCheckBtnText = $this.find(".order-check-text")
+    console.log($orderCheckBtnText)
+    var $orderCheckBtnSpinner = $this.find(".spinner-border")
+    $orderCheckBtnText.addClass("visually-hidden")
+    $orderCheckBtnSpinner.removeClass("visually-hidden")
+    $orderCheckButtons.prop('disabled', true)
+    var orderId = $this.attr('data-order-id')
     var url = `http://127.0.0.1:5000/api/order/${orderId}/`;
     $.get(url, function (resp) {
-        console.log(resp);
         var $newModal = $modal.clone();
         var $prodDetailTbody = $newModal.find("table tbody")
         var $prodDetailTr = $prodDetailTbody.find("tr").remove()
@@ -32,5 +39,8 @@ $("a.order-check").click(function (e) {
             $prodDetailTbody.append($newProdTr)
         })
         modal.show();
+        $orderCheckBtnText.removeClass("visually-hidden")
+        $orderCheckBtnSpinner.addClass("visually-hidden")
+        $orderCheckButtons.prop('disabled', false)
     });
 });
