@@ -87,3 +87,9 @@ body {
         text-align: center;
     }
 }
+@media (min-width: 768px) {
+    #sidebarMenu {
+        position: fixed!important;
+        height: 100%!important;
+    }
+}
