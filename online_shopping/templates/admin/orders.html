@@ -37,11 +37,11 @@
             </div>
             <div class="modal-body">
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">نام مشتری:</li>
-                    <li class="list-group-item">آدرس:</li><br>
-                    <li class="list-group-item">تلفن:</li>
-                    <li class="list-group-item">زمان تحویل:</li>
-                    <li class="list-group-item">زمان سفارش:</li>
+                    <li class="list-group-item">نام مشتری:  <span dir='auto' class='customer-fullname'></span></li>
+                    <li class="list-group-item">آدرس:  <span dir='auto' class='customer-address d-flex'></span></li>
+                    <li class="list-group-item">تلفن:  <span dir='auto' class='customer-cellphone-number'></span></li>
+                    <li class="list-group-item">زمان تحویل:  <span dir='auto' class='customer-delivery-date'></span></li>
+                    <li class="list-group-item">زمان سفارش:  <span dir='auto' class='customer-order-date'></span></li>
                 </ul>
                 <br><br>
                 <table class="table table-striped">
@@ -54,25 +54,11 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1</td>
-                            <td><a href="#">روغن سرخ کردنی سمن 1.35 کیلویی</a></td>
-                            <td>10,000</td>
-                            <td>انبار شماره 1</td>
-                            <td>20</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td><a href="#">کره سنتی شکلی 100 گرمی</a></td>
-                            <td>25,500</td>
-                            <td>انبار شماره 2</td>
-                            <td>400</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td><a href="#">قهوه اسپرسو بن مانو مدل آرتیمان 250 گرمی</a></td>
-                            <td>1,000,000</td>
-                            <td>انبار شماره 1</td>
-                            <td>500</td>
+                            <td class="pro-id"></td>
+                            <td class="pro-name"><a href="#"></a></td>
+                            <td class="pro-price"></td>
+                            <td class="pro-warehouse"></td>
+                            <td class="pro-quantity"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -83,6 +69,7 @@
         </div>
     </div>
 </div>
+
 {% endblock %}
 {% block script %}
 {{ super() }}

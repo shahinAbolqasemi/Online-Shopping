@@ -93,7 +93,7 @@ def admin_product():
 @login_required
 def admin_warehouse():
     db = get_db()
-    warehouses = db.warehouses.find()
+    warehouses = db.products.find()[0]['warehouses']
     return render_template('admin/warehouses.html', warehouses=warehouses)
 
 
