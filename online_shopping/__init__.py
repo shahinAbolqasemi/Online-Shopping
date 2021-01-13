@@ -8,7 +8,6 @@ from online_shopping.util.json_encoders import JSONEncoder
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
-
     if test_config is None:
         app.config.from_pyfile('config.py', silent=True)
     else:
@@ -18,6 +17,13 @@ def create_app(test_config=None):
     app.jinja_env.filters['format_currency'] = format_currency
     app.jinja_env.filters['jalali_date'] = format_date_to_jalali
 
+    from werkzeug.middleware.shared_data import SharedDataMiddleware
+    app.add_url_rule('/uploads/<filename>', 'uploaded_file',
+                     build_only=True)
+
+    app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
+        '/uploads': app.config['UPLOAD_FOLDER']
+    })
     # app.logger.debug('app.config = %s', app.config)
 
     # try:
