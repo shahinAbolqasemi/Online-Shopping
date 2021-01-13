@@ -1,4 +1,5 @@
 {% extends "blog/base.html" %}
+{% block badge %}<span id="orderCount" class="badge bg-danger"></span>{% endblock %}
 {% block body %}
     <div class="row p-5">
         <div class="col col-6">
@@ -22,10 +23,10 @@
             </div>
             <div class="d-flex flex-row justify-content-between mt-5">
                 <div>
-                    <input id="number" value="0" type="number" min="0" style="width: 30%;">
+                    <input aria-label="" id="number" type="number" min="0" max="{{ product.quantity }}" style="width: 30%;">
                 </div>
                 <div>
-                    <button type="button" class="btn btn-outline-success" onclick="buyCounter()">
+                    <button type="button" class="btn btn-outline-success" id="add_to_cart" data-order-id="{{ product._id }}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                             class="bi bi-plus-square" viewBox="0 0 16 16">
                             <path
@@ -49,3 +50,4 @@
         </h2>
     </div>
 {% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='blog/product.js') }}"></script>{% endblock %}

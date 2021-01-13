@@ -1,22 +1,14 @@
 # import functools
 import json
-
-# import pymongo
+import pymongo
 from bson import ObjectId
-# from pymongo import MongoClient
-
 from online_shopping.db import get_db
 
 # import psycopg2.extras
-
-
 # from flask import flash
-# from flask import g
 # from flask import redirect
-from flask import render_template, Blueprint, session
+from flask import render_template, Blueprint, session, request, jsonify
 
-# from flask import request
-# from flask import session
 # from flask import url_for
 # from werkzeug.security import check_password_hash
 # from werkzeug.security import generate_password_hash
@@ -82,7 +74,7 @@ def get_products_by_category(cat):
             }
         }, {
             '$sort': {
-                'date': -1
+                'date': pymongo.DESCENDING
             }
         }
     ])
@@ -150,7 +142,7 @@ def get_product(product_id):
             }
         }, {
             '$sort': {
-                'warehouses.price': 1
+                'warehouses.price': pymongo.ASCENDING
             }
         }, {
             '$limit': 1
@@ -189,7 +181,18 @@ def product(product_id):
     return render_template('blog/product.html', product=pro)
 
 
-@bp.route("/cart/<product_id")
+@bp.route("/add_order", methods=['POST'])
+def add_order():
+    data = request.get_json()
+    if "order_products" not in session:
+        session["order_products"] = {}
+    session["order_products"].append(data)
+    session.modified = True
+    num = len(session["order_products"])
+    return jsonify({'number': num})
+
+
+@bp.route("/cart/<product_id>")
 def cart(product_id):
     if product_id is None:
         return render_template('blog/cart.html', product=session["order_products"])
@@ -200,6 +203,6 @@ def cart(product_id):
         return render_template('blog/cart.html', product=session["order_products"])
 
 
-@bp.route("/cart/<orders")
+@bp.route("/cart/<orders>")
 def checkout(orders):
     return render_template('blog/checkout.html', prosucts=orders)

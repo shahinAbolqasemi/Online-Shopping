@@ -1,5 +1,6 @@
 $(function () {
-    $("#add-to-cart").click(function () {
+    $("#add-to-cart").click(function (event) {
+        event.preventDefault();
         let $number = $("#number").val()
         let $id = $("#add-to-cart").getAttribute("data-order-id")
         let $data = {numbers:$number, id:$id}
@@ -12,8 +13,6 @@ $(function () {
                 alert("درخواست شما ثبت نشد")
             }
         })
-
-
     })
 
 })

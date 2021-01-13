@@ -40,7 +40,7 @@
                 </path>
             </svg>
             سبد خرید
-            <span id="buyCount" class="badge bg-danger"></span>
+            {% block badge %}<span id="buyCount" class="badge bg-danger"></span>{% endblock %}
         </button></a>
 
     </div>
@@ -48,7 +48,6 @@
 <hr>
 {% block body %}{% endblock %}
 {% block footer %}{% endblock %}
-</body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
         crossorigin="anonymous"></script>
@@ -59,4 +58,6 @@
         integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj"
         crossorigin="anonymous"></script>
 {% block scripts %}{% endblock %}
+</body>
+
 </html>
