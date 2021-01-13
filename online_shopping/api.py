@@ -26,7 +26,6 @@ def prod_list():
 @bp.route('/product/<product_id>/')
 @login_required
 def prod_details(product_id):
-    print('hello')
     product = get_db('products').find_one({'_id': ObjectId(product_id)})
     return jsonify(data=product)
 
@@ -99,8 +98,21 @@ def prod_delete(product_id):
 @bp.route('/product/add/', methods=['POST'])
 @login_required
 def prod_upload():
+    products_collection = get_db('products')
     products_file = request.files.get('products-csv')
-    return ...
+    products_lines = products_file.read()
+    product_keys = next(products_lines)
+    products = []
+    for i, product_line in enumerate(products_lines):
+        products.append({})
+        for elem, key in zip(product_line, product_keys.split(',')):
+            products[i][key] = elem
+    try:
+        products_collection.insert_many(products)
+    except (Exception) as ex:
+        return jsonify(status={'success': False})
+    else:
+        return jsonify(status={'success': True})
 
 
 @bp.route('/warehouse/list/')
