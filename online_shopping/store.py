@@ -3,11 +3,11 @@ import json
 import pymongo
 from bson import ObjectId
 from online_shopping.db import get_db
-
+from datetime import datetime
 # import psycopg2.extras
 # from flask import flash
 # from flask import redirect
-from flask import render_template, Blueprint, session, request, jsonify
+from flask import render_template, Blueprint, session, request, jsonify, current_app
 
 # from flask import url_for
 # from werkzeug.security import check_password_hash
@@ -213,9 +213,33 @@ def add_order():
             session.modified = True
             num = len(session["order_products"])
             return jsonify({'badge_number': num, 'status': 'success'})
-    return jsonify({'status': 'success'})
+    return jsonify({'status': 'fail'})
 
 
 @bp.route("/cart/approve")
 def cart_approve():
-    return render_template('blog/cart_approve.html', prosucts=orders)
+    return render_template('blog/cart_approve.html')
+
+
+@bp.route("/order_final", methods=['POST'])
+def order_final():
+    if session["order_products"]:
+        data = request.get_json()
+        purchasedProductsId = []
+        for item in session["order_products"]:
+            pro = get_product(item['id'])
+            purchasedProductsId.append(
+                {"productId": {"$oid": pro["_id"]}, "name": pro.name, "warehouseName": pro.warehouse_name,
+                 "count": item.numbers, "price": {"$numberDecimal": pro.price}, })
+        total_price = sum(order['price'] * order['count'] for order in purchasedProductsId)
+        product_document = {"customerFirstName": data.first_name, "customerLastName": data.last_name,
+                            "customerCellPhoneNum": data.telephone, "address": data.addrecc,
+                            "deliveryDate": {"$date": data.date}, "amount": {"$numberDecimal": total_price},
+                            "date": current_app.config['TEHRAN_TZ'].localize(datetime.now())}
+        try:
+            get_db('products').insert_one(product_document)
+        except Exception as ex:
+            return jsonify({'status': "fail", 'exception': ex})
+        else:
+            session.pop('order_products', None)
+            return jsonify({'status': "success"})

@@ -5,30 +5,31 @@
             <h1>نهایی کردن خرید</h1><br>
             <div class="row">
                 <div class="col">
-                    <label for="fname"><b>نام:</b></label>
-                    <input type="text" name="fname" required><br><br>
-                    <label for="adress"><b>آدرس:</b></label>
-                    <input type="text" class="form-control" id="adress" placeholder="استان، شهر، خیابان، کوچه، پلاک"
+                    <label for="first_name"><b>نام:</b></label>
+                    <input type="text" name="f_name" id="first_name" required><br><br>
+                    <label for="address"><b>آدرس:</b></label>
+                    <input type="text" class="form-control" id="address" placeholder="استان، شهر، خیابان، کوچه، پلاک"
                         required><br><br>
-                    <label for="deliverDate"><b>تاریخ تحویل:</b></label><br>
+                    <label for="date"><b>تاریخ تحویل:</b></label><br>
                     <!-- <input type="text" name="deliverDate"><br> -->
                     <div class="col-12">
-                        <input class="form-control" type="date" value="2011-08-19">
+                        <input class="form-control" type="date" id="date">
                     </div>
                 </div>
                 <div class="col">
-                    <label for="lname"><b>نام خانوادگی:</b></label>
-                    <input type="text" name="lname" required><br><br>
+                    <label for="last_name"><b>نام خانوادگی:</b></label>
+                    <input type="text" name="l_name" id="last_name" required><br><br>
                     <div class="d-inline-flex">
                         <label for="phoneNumber"><b>تلفن همراه:</b></label>
                         <p class="font-weight-light mx-4">جهت هماهنگی ارسال سفارش</p>
                     </div>
-                    <input type="text" name="phoneNumber" required>
+                    <input type="text" name="phoneNumber" id="phoneNumber" required>
                 </div>
             </div><br><br>
             <div class="d-flex justify-content-center">
-                <button type="button" class="btn btn-success px-5"><b>ثبت تهایی سفارش</b></button>
+                <button type="button" class="btn btn-success px-5" id="finalizing"><b>ثبت تهایی سفارش</b></button>
             </div>
         </div>
     </div>
 {% endblock %}
+{% block scripts %}<script src="{{ url_for('static', filename='blog/cart_approve.js') }}"></script>{% endblock %}
