@@ -49,11 +49,11 @@ def prod_add():
         'image': image_url
     }
     try:
-        get_db('products').insert_one(product_document)
+        product_added = get_db('products').insert_one(product_document)
     except (Exception) as ex:
         return jsonify(status={'status': False})
     else:
-        return jsonify(status={'status': True})
+        return jsonify(status={'status': True}, data={'productId': product_added['_id']})
 
 
 @bp.route('/product/edit/', methods=['POST'])
@@ -181,7 +181,7 @@ def quantity_list():
             }
         }
     ])
-    return jsonify(data=quantities)
+    return jsonify(data=list(quantities))
 
 
 @bp.route('/quantity/add/', methods=['POST'])
@@ -280,6 +280,7 @@ def order_details(order_id):
     #                 '_id': 0
     #             }
     #         }
+
     #     ]
     # )
     data = order
