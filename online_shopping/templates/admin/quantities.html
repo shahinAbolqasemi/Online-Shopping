@@ -2,78 +2,124 @@
 {% block content %}
 <h2 class="mb-3 mt-4">مدیریت موجودی و قیمت ها</h2>
 <div class="my-3 text-left">
-<button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">افزودن موجودی</button>
+  <button id="addQuantity" type="button" class="btn btn-success" data-bs-toggle="modal"
+    data-bs-target="#addModal">افزودن موجودی</button>
 </div>
 <table class="col table table-striped mt-4">
-    <thead>
-        <tr>
-            <th>
-                انبار
-            </th>
-            <th>
-                کالا
-            </th>
-            <th>
-                قیمت
-            </th>
-            <th>
-                موجودی
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    {% for product in products %}
-        {% for warehouse in product.warehouses %}
-{#            {% if warehouse.price > 0 %}#}
-            <tbody>
-                <tr>
-                    <td>{{ warehouse.name }}</td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ warehouse.price }}</td>
-                    <td>{{ warehouse.quantity }}</td>
-                    <td><button type="button" id="editQuantity" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#exampleModal">ویرایش</button>
-                     <button type="button" id="deleteQuantity" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#deleteModal">حذف</button></td>
-                </tr>
-            </tbody>
-{#            {% endif %}#}
-        {% endfor %}
-    {% endfor %}
+  <thead>
+    <tr>
+      <th>
+        انبار
+      </th>
+      <th>
+        کالا
+      </th>
+      <th>
+        قیمت
+      </th>
+      <th>
+        موجودی
+      </th>
+      <th></th>
+    </tr>
+  </thead>
+  {% for product in products %}
+  {% for warehouse in product.warehouses %}
+  {#            {% if warehouse.price > 0 %}#}
+  <tbody>
+    <tr data-warehouse-id="{{ warehouse._id }}" data-product-id="{{ product._id }}">
+      <td>{{ warehouse.name }}</td>
+      <td>{{ product.name }}</td>
+      <td>{{ warehouse.price }}</td>
+      <td>{{ warehouse.quantity }}</td>
+      <td><button type="button" id="editQuantity" class="btn btn-link" data-bs-toggle="modal"
+          data-bs-target="#editModal">ویرایش</button>
+        <button type="button" id="deleteQuantity" class="btn btn-link" data-bs-toggle="modal"
+          data-bs-target="#deleteModal">حذف</button></td>
+    </tr>
+  </tbody>
+  {#            {% endif %}#}
+  {% endfor %}
+  {% endfor %}
 </table>
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+<!-- Add Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">افزودن/ویرایش موجودی</h5>
+        <h5 class="modal-title" id="exampleModalLabel">افزودن موجودی</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form>
           <div class="mb-3">
             <label for="warehouse" class="form-label">انبار</label>
-              <select class="form-select" aria-label="Default select example">
-                  <option selected>انتخاب انبار</option>
-                  <option value="1">انبار 1</option>
-                  <option value="2">انبار 2</option>
-                  <option value="3">انبار 3</option>
-              </select>
+            <select class="form-select" aria-label="Default select example" id="warehouseName">
+              <option selected>انتخاب انبار</option>
+              {% for warehouse in warehouses %}
+              <option value="1">{{ warehouse.name }}</option>
+              {% endfor %}
+            </select>
             <label for="productName" class="form-label">نام کالا</label>
-            <input type="text" class="form-control" id="productName">
-              <label for="price" class="form-label">قیمت</label>
-              <input type="text" class="form-control" id="price">
-              <label for="quantity" class="form-label">موجودی</label>
-              <input type="text" class="form-control" id="quantity">
+            <select class="form-select" aria-label="Default select example" id="productName">
+              <option>انتخاب کالا</option>
+              {% for product in products %}
+              <option value="1">{{ product.name }}</option>
+              {% endfor %}
+            </select>
+            <label for="price" class="form-label">قیمت</label>
+            <input type="text" class="form-control" id="price">
+            <label for="quantity" class="form-label">موجودی</label>
+            <input type="text" class="form-control" id="quantity">
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
-        <button type="button" class="btn btn-primary" id="saveBtn">ذخیره</button>
+        <button type="button" class="btn btn-primary" id="saveBtnAdd">ذخیره</button>
       </div>
     </div>
   </div>
 </div>
-<!-- Modal -->
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">ویرایش موجودی</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="warehouse" class="form-label">انبار</label>
+            <select class="form-select" aria-label="Default select example" id="warehouseName">
+              <option selected>انتخاب انبار</option>
+              {% for warehouse in warehouses %}
+              <option value="1">{{ warehouse.name }}</option>
+              {% endfor %}
+            </select>
+            </select>
+            <label for="productName" class="form-label">نام کالا</label>
+            <input type="text" class="form-control" id="productName">
+            <label for="price" class="form-label">قیمت</label>
+            <input type="text" class="form-control" id="price">
+            <label for="quantity" class="form-label">موجودی</label>
+            <input type="text" class="form-control" id="quantity">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
+        <button type="button" class="btn btn-primary" id="saveBtnEdit">ذخیره</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -86,7 +132,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">خیر</button>
-        <button type="button" class="btn btn-primary">بله</button>
+        <button type="button" class="btn btn-primary" id="saveBtnDelete">بله</button>
       </div>
     </div>
   </div>
