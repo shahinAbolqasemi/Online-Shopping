@@ -7,7 +7,7 @@ from datetime import datetime
 # import psycopg2.extras
 # from flask import flash
 # from flask import redirect
-from flask import render_template, Blueprint, session, request, jsonify, current_app
+from flask import render_template, Blueprint, session, request, jsonify, current_app, abort
 
 # from flask import url_for
 # from werkzeug.security import check_password_hash
@@ -26,7 +26,7 @@ def get_categories():
     for group in json_categories:
         if group['subcategories']:
             for item in group['subcategories']:
-                categories.append(group['name'] + '/' + item['name'])
+                categories.append(item['name'])
         else:
             categories.append(group['name'])
 
@@ -85,41 +85,47 @@ def home():
     categories = get_categories()
     full_category = []
     for cat in categories:
-        pro = list(get_products_by_category(cat).limit(4))
-        full_category.append({'single_category': cat.split('/')[-1],
-                              'category': cat,
+        pro = list(get_products_by_category(cat))
+        full_category.append({'single_category': cat,
                               'products': pro})
 
     return render_template('blog/home.html', categories=full_category)
 
 
-def get_single_category(cat):
+def get_single_category():
     with open('instance/categories.json', encoding='utf-8') as f:
         json_categories = json.load(f)
-    single_cat = cat.split('/')[0]
-    products = list(get_products_by_category(single_cat))
+
+    db = get_db()
+    products = list(db.products.find())
 
     categories_of_single = {}
     for group in json_categories:
-        if group['subcategories'] and group['name'] == single_cat:
+        if group['subcategories']:
             for item in group['subcategories']:
                 categories_of_single[item['name']] = []
 
     for thing in products:
         thing_category = thing['category'].split('/')[-1]
-        categories_of_single[thing_category].append(thing)
-
+        if categories_of_single[thing_category]:
+            pro_details = {"id": thing["_id"], "name": thing["name"], "product_category": thing_category}
+            categories_of_single[thing_category].append(pro_details)
+        else:
+            categories_of_single[thing_category] = []
+            pro_details = {"id": thing["_id"], "name": thing["name"], "product_category": thing_category}
+            categories_of_single[thing_category].append(pro_details)
+    print(categories_of_single, products)
     return categories_of_single
 
 
 @bp.route("/category/<category_name>")
 def category(category_name):
-    side_cat_pro_name = get_single_category(category_name)
+    side_cat_pro_name = get_single_category()
     page_products = list(get_products_by_category(category_name))
-    page_category_name = category_name.split('/')[-1]
+    # page_category_name = category_name.split('/')[-1]
     return render_template('blog/category.html', side_categories=side_cat_pro_name,
                            page_products=page_products,
-                           category_single=page_category_name)
+                           category_single=category_name)
 
 
 def get_product(product_id):
@@ -184,15 +190,18 @@ def product(product_id):
 @bp.route("/add_order", methods=['POST'])
 def add_order():
     data = request.get_json()
-    if "order_products" not in session:
-        session["order_products"] = {}
-    session["order_products"].append(data)
-    session.modified = True
-    num = len(session["order_products"])
-    return jsonify({'badge_number': num})
+    if request.method == "POST":
+        if "order_products" not in session:
+            session["order_products"] = {}
+        session["order_products"].append(data)
+        session.modified = True
+        num = len(session["order_products"])
+        return jsonify({'badge_number': num})
+    else:
+        abort(404)
 
 
-@bp.route("/cart")
+@bp.route("/cart", methods=["GET", "POST"])
 def cart():
     orders = []
     if 'order_products' not in session:
@@ -205,7 +214,7 @@ def cart():
 
 
 @bp.route("/delete_order_product", methods=['POST'])
-def add_order():
+def delete_order_product():
     data = request.get_json()
     for item in session["order_products"]:
         if data['id'] in item:
