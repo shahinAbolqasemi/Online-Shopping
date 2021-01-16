@@ -2,18 +2,21 @@
 <h2 class="mb-3 mt-4">مدیریت کالا ها</h2>
 <div class="my-3 text-right">
   <button
-    id="addProduct"
     type="button"
-    class="btn btn-success"
+    class="btn btn-success addProduct"
     data-bs-toggle="modal"
     data-bs-target="#addModal"
   >
     افزودن کالا
   </button>
-  <label class="btn btn-primary" for="my-file-selector">
-    <input id="my-file-selector" type="file" class="d-none" />
-    import
-  </label>
+  <button
+    type="button"
+    class="btn btn-success importFile"
+    data-bs-toggle="modal"
+    data-bs-target="#importModal"
+  >
+      import
+    </button>
 </div>
 <table class="col table table-striped mt-4">
   <thead>
@@ -24,28 +27,26 @@
       <th></th>
     </tr>
   </thead>
-  {% for product in products %}
   <tbody>
+    {% for product in products %}
     <tr data-product-id="{{ product._id }}">
       <td><img src="{{ product.image }}" width="75px" height="75px" /></td>
-      <td id="productName">{{ product.name }}</td>
+      <td>{{ product.name }}</td>
       <td>{{ product.category }}</td>
       <td>
         <button
-          data-product-id="{{ product._id }}"
+{#          data-product-id="{{ product._id }}"#}
           type="button"
-          id="editProduct"
-          class="btn btn-link"
+          class="btn btn-link editProduct"
           data-bs-toggle="modal"
           data-bs-target="#editModal"
         >
           ویرایش
         </button>
         <button
-          data-product-id="{{ product._id }}"
+{#          data-product-id="{{ product._id }}"#}
           type="button"
-          id="deleteProduct"
-          class="btn btn-link"
+          class="btn btn-link deleteProduct"
           data-bs-toggle="modal"
           data-bs-target="#deleteModal"
         >
@@ -53,8 +54,8 @@
         </button>
       </td>
     </tr>
+    {% endfor %}
   </tbody>
-  {% endfor %}
 </table>
 
 <!-- add Modal -->
@@ -80,24 +81,24 @@
         <form>
           <div class="mb-3">
             <label for="productName" class="form-label">نام کالا</label>
-            <input type="text" class="form-control" id="productName" />
+            <input type="text" class="form-control productName" id="productName" />
             <label for="formFileSm" class="form-label">عکس</label>
             <input
-              class="form-control form-control-sm"
+              class="form-control form-control-sm productImage"
               id="productImage"
               type="file"
             />
             <label for="category" class="form-label">دسته بندی</label>
-            <select class="form-select" aria-label="Default select example">
+            <select class="form-select productCategory" aria-label="Default select example">
               <option selected>انتخاب دسته</option>
               {% for category in categories %}
-              <option value="1">{{ category }}</option>
+              <option>{{ category }}</option>
               {% endfor %}
             </select>
             <label for="description" class="form-label">توضیحات:</label>
             <input
               type="text"
-              class="form-control"
+              class="form-control productDescription"
               aria-label="Text input with segmented dropdown button"
               id="description"
             />
@@ -108,7 +109,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           بستن
         </button>
-        <button type="button" class="btn btn-primary" id="saveBtnAdd">
+        <button type="button" class="btn btn-primary saveBtnAdd">
           ذخیره
         </button>
       </div>
@@ -139,28 +140,22 @@
         <form>
           <div class="mb-3">
             <label for="productName" class="form-label">نام کالا</label>
-            <input type="text" class="form-control" id="productName" />
-            <label for="productImage" class="form-label">عکس</label>
-            <input
-              class="form-control form-control-sm"
-              id="productImage"
-              type="file"
-            />
+            <input type="text" class="form-control productName" id="productName" />
             <label for="productCategory" class="form-label">دسته بندی</label>
             <select
-              class="form-select"
+              class="form-select productCategory"
               aria-label="Default select example"
               id="productCategory"
             >
               <option selected>انتخاب دسته</option>
               {% for category in categories %}
-              <option value="1">{{ category }}</option>
+              <option>{{ category }}</option>
               {% endfor %}
             </select>
             <label for="description" class="form-label">توضیحات:</label>
             <input
               type="text"
-              class="form-control"
+              class="form-control productDescription"
               aria-label="Text input with segmented dropdown button"
               id="productDescription"
             />
@@ -171,7 +166,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           بستن
         </button>
-        <button type="button" class="btn btn-primary" id="saveBtnEdit">
+        <button type="button" class="btn btn-primary saveBtnEdit">
           ذخیره
         </button>
       </div>
@@ -205,7 +200,44 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           خیر
         </button>
-        <button type="button" class="btn btn-primary" id="saveBtnDelete">
+        <button type="button" class="btn btn-primary saveBtnDelete">
+          بله
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{#Import Modal#}
+    <div
+  class="modal fade"
+  id="importModal"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">آپلود فایل</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+          <div class="custom-file">
+              <input type="file" class="custom-file-input" id="customFile">
+              <label class="custom-file-label" for="customFile">Choose file</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          خیر
+        </button>
+        <button type="button" class="btn btn-primary saveBtnImport">
           بله
         </button>
       </div>
