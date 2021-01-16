@@ -84,11 +84,11 @@ def prod_edit():
         return jsonify(status={'status': True})
 
 
-@bp.route('/product/delete/<product_id>/')
+@bp.route('/product/delete/<productId>/')
 @login_required
-def prod_delete(product_id):
+def prod_delete(productId):
     try:
-        get_db("products").delete_one({"_id": ObjectId(product_id)})
+        get_db("products").delete_one({"_id": ObjectId(productId)})
     except (Exception) as ex:
         return jsonify(status={'success': False})
     else:
@@ -125,7 +125,7 @@ def ware_list():
 @bp.route('/warehouse/add/', methods=['POST'])
 @login_required
 def ware_add():
-    warehouse_name = request.form.get('warehouse-name')
+    warehouse_name = request.form.get('name')
     try:
         get_db("warehouses").insert_one({'name': warehouse_name})
     except (Exception) as ex:
@@ -139,7 +139,7 @@ def ware_add():
 def ware_edit():
     warehouses = get_db('warehouses')
     warehouse_id = request.form.get('warehouseId')
-    warehouse_name = request.form.get('warehouse-name')
+    warehouse_name = request.form.get('name')
     # if warehouse_id := request.form.get('warehouseId'):
     #     warehouse = warehouses.find({"_id": ObjectId(warehouse_id)})
     #     return jsonify(data=warehouse)
@@ -152,11 +152,11 @@ def ware_edit():
         return jsonify(status={'success': True})
 
 
-@bp.route('/warehouse/delete/<warehouse_id>/')
+@bp.route('/warehouse/delete/<warehouseId>/')
 @login_required
-def ware_delete(warehouse_id):
+def ware_delete(warehouseId):
     try:
-        get_db('warehouses').delete_one({"_id": ObjectId(warehouse_id)})
+        get_db('warehouses').delete_one({"_id": ObjectId(warehouseId)})
     except (Exception) as ex:
         return jsonify(status={'success': False})
     else:
