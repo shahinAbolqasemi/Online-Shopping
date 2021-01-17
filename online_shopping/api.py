@@ -33,7 +33,7 @@ def prod_details(product_id):
 @bp.route('/product/add/', methods=['POST'])
 @login_required
 def prod_add():
-    image_file = request.files.get('prod-image')
+    image_file = request.files.get('image')
     if image_file:
         filename = secure_filename(image_file.filename)
         image_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
@@ -42,9 +42,9 @@ def prod_add():
         image_url = url_for('uploads', filename='default_product_image.jpg')
 
     product_document = {
-        'name': request.form.get('prod-name'),
-        'description': request.form.get('prod-desc'),
-        'category': request.form.get('prod-category'),
+        'name': request.form.get('name'),
+        'description': request.form.get('description'),
+        'category': request.form.get('category'),
         'date': current_app.config['TEHRAN_TZ'].localize(datetime.now()),
         'image': image_url
     }
@@ -66,11 +66,11 @@ def prod_edit():
     #     return jsonify(data=product)
     # else:
     product_document = {
-        'name': request.form.get('prod-name'),
-        'description': request.form.get('prod-desc'),
-        'category': request.form.get('prod-category')
+        'name': request.form.get('name'),
+        'description': request.form.get('description'),
+        'category': request.form.get('category')
     }
-    image_file = request.files.get('prod-image')
+    image_file = request.files.get('image')
     if image_file:
         filename = secure_filename(image_file.filename)
         image_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
@@ -84,22 +84,22 @@ def prod_edit():
         return jsonify(status={'status': True})
 
 
-@bp.route('/product/delete/<product_id>/')
+@bp.route('/product/delete/<productId>/')
 @login_required
-def prod_delete(product_id):
+def prod_delete(productId):
     try:
-        get_db("products").delete_one({"_id": ObjectId(product_id)})
+        get_db("products").delete_one({"_id": ObjectId(productId)})
     except (Exception) as ex:
         return jsonify(status={'success': False})
     else:
         return jsonify(status={'success': True})
 
 
-@bp.route('/product/add/', methods=['POST'])
+@bp.route('/product/upload/', methods=['POST'])
 @login_required
 def prod_upload():
     products_collection = get_db('products')
-    products_file = request.files.get('products-csv')
+    products_file = request.files.get('file')
     products_lines = products_file.read()
     product_keys = next(products_lines)
     products = []
@@ -125,13 +125,13 @@ def ware_list():
 @bp.route('/warehouse/add/', methods=['POST'])
 @login_required
 def ware_add():
-    warehouse_name = request.form.get('warehouse-name')
+    warehouse_name = request.form.get('name')
     try:
-        get_db("warehouses").insert_one({'name': warehouse_name})
+        warehouse_added = get_db("warehouses").insert_one({'name': warehouse_name})
     except (Exception) as ex:
         return jsonify(status={'success': False})
     else:
-        return jsonify(status={'success': True})
+        return jsonify(status={'success': True}, data={'warehouseId': warehouse_added['_id']})
 
 
 @bp.route('/warehouse/edit/', methods=['POST'])
@@ -139,7 +139,7 @@ def ware_add():
 def ware_edit():
     warehouses = get_db('warehouses')
     warehouse_id = request.form.get('warehouseId')
-    warehouse_name = request.form.get('warehouse-name')
+    warehouse_name = request.form.get('name')
     # if warehouse_id := request.form.get('warehouseId'):
     #     warehouse = warehouses.find({"_id": ObjectId(warehouse_id)})
     #     return jsonify(data=warehouse)
@@ -152,11 +152,11 @@ def ware_edit():
         return jsonify(status={'success': True})
 
 
-@bp.route('/warehouse/delete/<warehouse_id>/')
+@bp.route('/warehouse/delete/<warehouseId>/')
 @login_required
-def ware_delete(warehouse_id):
+def ware_delete(warehouseId):
     try:
-        get_db('warehouses').delete_one({"_id": ObjectId(warehouse_id)})
+        get_db('warehouses').delete_one({"_id": ObjectId(warehouseId)})
     except (Exception) as ex:
         return jsonify(status={'success': False})
     else:
@@ -188,11 +188,12 @@ def quantity_list():
 @login_required
 def quantity_add():
     products = get_db('products')
-    product_id = request.form.get('productId')
-    warehouse_name = request.form.get('warehouse-name')
-    warehouse_id = request.form.get('warehouse-id')
-    product_price = request.form.get('product-price')
-    product_quantity = request.form.get('product-quantity')
+    # product_id = request.form.get('productId')
+    warehouse_name = request.form.get('warehouseName')
+    product_name = request.form.get('productName')
+    # warehouse_id = request.form.get('warehouse-id')
+    product_price = request.form.get('price')
+    product_quantity = request.form.get('quantity')
     try:
         products.update_one({
             "_id": ObjectId(product_id)},

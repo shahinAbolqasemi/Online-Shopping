@@ -75,7 +75,7 @@ def login():
     return render_template('admin/login.html')
 
 def get_categories():
-    with open('online_shopping/categories.json') as f:
+    with open('instance/categories.json', encoding='utf-8') as f:
         categories = json.load(f)
 
     categories_list = []
