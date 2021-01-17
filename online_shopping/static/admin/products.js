@@ -85,7 +85,9 @@ $(".addProduct").click(function (e) {
     var $category = $("#addModal .productCategory").val();
     var $description = $("#addModal .productDescription").val();
     var fd = new FormData();
-    var image = $("#addModal .productImage")[0].files[0];
+    var image = $("#addModal .productImage")[0].files;
+    console.log('image:', image);
+    console.log('image0: ', image[0]);
     // console.log($name);
     // console.log($category);
     // console.log(image);
@@ -96,7 +98,7 @@ $(".addProduct").click(function (e) {
     fd.append('category', $category);
     fd.append('description', $description);
     console.log('fd', fd);
-    console.log(fd.getAll('name'));
+    console.log('image', fd.getAll('image'));
     var row = "<tr>";
     row += "<td>" + $name + "</td>";
     row += "<td>" + $category + "</td>";
@@ -142,13 +144,17 @@ $(".importFile").click(function (e) {
   $("#importModal .saveBtnImport").click(function () {
     console.log('click')
     var fd = new FormData();
-    var file = $("#importModal #customFile");
+    var file = $("#importModal #customFile")[0].files;
+    console.log('file:', file);
+    console.log('file0: ', file[0]);
     var url = "http://127.0.0.1:5000/api/product/upload/";
     if (file.length > 0) {
-      console.log('file', file),
+      // console.log('file', file);
       fd.append('file', file[0]);
+      // console.log(typeof file[0]);
+      // console.log(file[0]);
       // console.log('fd', fd);
-
+      // console.log(fd.getAll('file'));
       $.ajax({
         url: url,
         data: fd,
