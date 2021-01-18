@@ -122,7 +122,6 @@ def get_single_category():
 def category(category_name):
     side_cat_pro_name = get_single_category()
     page_products = list(get_products_by_category(category_name))
-    # page_category_name = category_name.split('/')[-1]
     return render_template('blog/category.html', side_categories=side_cat_pro_name,
                            page_products=page_products,
                            category_single=category_name)
@@ -184,7 +183,9 @@ def get_product(product_id):
 @bp.route("/product/<product_id>", methods=["GET", "POST"])
 def product(product_id):
     pro = get_product(product_id)
-    return render_template('blog/product.html', product=pro)
+    pro = [i for i in pro][0]
+    cat = pro["category"].split('/')[-1]
+    return render_template('blog/product.html', product=pro, pro_category=cat)
 
 
 @bp.route("/add_order", methods=['POST'])
