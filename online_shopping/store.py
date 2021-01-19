@@ -7,7 +7,7 @@ from datetime import datetime
 # import psycopg2.extras
 # from flask import flash
 # from flask import redirect
-from flask import render_template, Blueprint, session, request, jsonify, current_app, abort
+from flask import render_template, Blueprint, session, request, jsonify, current_app
 
 # from flask import url_for
 # from werkzeug.security import check_password_hash
@@ -188,18 +188,17 @@ def product(product_id):
     return render_template('blog/product.html', product=pro, pro_category=cat)
 
 
-@bp.route("/add_order", methods=['POST'])
+@bp.route("/add_order", methods=['POST', "GET"])
 def add_order():
+    print("yyyyyyyyyeeeeeeeeeessssssss")
     data = request.get_json()
-    if request.method == "POST":
-        if "order_products" not in session:
-            session["order_products"] = {}
-        session["order_products"].append(data)
-        session.modified = True
-        num = len(session["order_products"])
-        return jsonify({'badge_number': num})
-    else:
-        abort(404)
+    if "order_products" not in session:
+        session["order_products"] = {}
+    session["order_products"].append(data)
+    session.modified = True
+    num = len(session["order_products"])
+    # return jsonify({'badge_number': num})
+    return "yyyyyyyyyeeeeeeeeeessssssss"
 
 
 @bp.route("/cart", methods=["GET", "POST"])
