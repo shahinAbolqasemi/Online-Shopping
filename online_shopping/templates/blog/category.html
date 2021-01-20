@@ -1,43 +1,54 @@
 {% extends "blog/base.html" %}
+{% block style %}
+    <style>a {
+        text-decoration: none
+    }</style>{% endblock %}
 {% block body %}
     <div class="row">
         <div class="col col-2 border border-dark border-bottom-0 border-top-0 border-right-0">
-            <ul class="list-unstyled">
-                {% for category, products in side_categories.items %}
+            <ul class="list-unstyled mx-2 p-0">
+                {% for s_category in side_categories.keys() %}
                     <li class="{{ category }} mt-3"><a
-                            href="{{ url_for('store.category', category_name=products.0.category) }}">{{ category }}</a>
-                        <ul>
-                            {% for product in products %}
-                                <li><a href="{{ url_for('store.product', id=product.id) }}">{{ product.name }}</a></li>
+                            href="{{ url_for('store.category', category_name=s_category) }}">{{ s_category }}</a>
+                        <ul class="mx-2 p-0">
+                            {% for product in side_categories[s_category] %}
+                                <li>
+                                    <a href="{{ url_for('store.product', product_id=product["id"]) }}">{{ product["name"] }}</a>
+                                </li>
                             {% endfor %}
                         </ul>
                     </li>
+                    <br>
                 {% endfor %}
             </ul>
         </div>
 
         <div class="col col-10">
             <div class="col firstProduct" id="main">
-                <div class="m-3 row">
+                <div class="m-3">
                     <div class="mx-4"><h1>کالاهای
                         گروه {{ category_single }}</h1></div>
-                    {% for item in page_category %}
-                        <a href="{{ url_for('store.product', id=item.id) }}">
-                            <div class="card m-4 border border-primary rounded" style="width: 350px;">
-                                {% if item.image %}
-                                    <img class="card-img-top" src="{{ item.image }}" alt="{{ item.name }}">
-                                {% else %}
-                                    <img class="card-img-top" src="" alt="{{ item.name }}">
-                                {% endif %}
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ item.name }}</h5>
+                    <div class="d-flex flex-row">
+                        {% for item in page_products %}
+                            <a href="{{ url_for('store.product', product_id=item["_id"]) }}">
+                                <div class="col card m-4 border border-primary rounded" style="width: 300px;">
+                                    {% if item.image %}
+                                        <img class="card-img-top" style="height: 150px" src="{{ item.image }}"
+                                             alt="{{ item.name }}">
+                                    {% else %}
+                                        <img class="card-img-top" style="height: 150px" src="{{ item.image }}"
+                                             alt="{{ item.name }}">
+                                    {% endif %}
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{ item.name }}</h5>
+                                    </div>
+                                    <div class="card-footer d-flex justify-content-between">
+                                        <div><small class="text-muted">{{ item.price }} تومان</small></div>
+                                    </div>
                                 </div>
-                                <div class="card-footer d-flex justify-content-between">
-                                    <div><small class="text-muted">{{ item.price }} تومان</small></div>
-                                </div>
-                            </div>
-                        </a>
-                    {% endfor %}
+                            </a>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
