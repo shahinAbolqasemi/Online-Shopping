@@ -4,21 +4,21 @@ $(function () {
         let number = $("#number").val();
         let id = $("#add_to_cart").attr("data-order-id");
         let data = JSON.stringify({numbers: number, id: id});
+        const url = 'http://127.0.0.1:5000/api/order/add/';
         $.ajax({
-            url: 'http://127.0.0.1:5000/add_order/',
-            data: data,
-            method: "POST",
-            headers: {
-                // "X-CSRFToken": csrftoken
-            },
-            crossDomain: true,
-        })
-            .done(function (result) {
-                $("#orderCount").html(result['badge_number']);
-                alert("درخواست با موفقیت انجام شد");
+            url: url,
+            data: {numbers: number, id: id},
+            method: "GET",
+            success: function (data) {
+                console.log("success");}
+
             })
-            .fail(function (error) {
-                alert("درخواست شما ثبت نشد" + error);
-            });
+            // .done(function (response) {
+            //     // $("#orderCount").html(result);
+            //     alert("درخواست با موفقیت انجام شد" + response);
+            // })
+            // .fail(function () {
+            //     alert("درخواست شما ثبت نشد");
+            // });
     });
 });

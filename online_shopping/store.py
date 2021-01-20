@@ -188,17 +188,15 @@ def product(product_id):
     return render_template('blog/product.html', product=pro, pro_category=cat)
 
 
-@bp.route("/add_order", methods=['POST', "GET"])
-def add_order():
-    print("yyyyyyyyyeeeeeeeeeessssssss")
-    data = request.get_json()
-    if "order_products" not in session:
-        session["order_products"] = {}
-    session["order_products"].append(data)
-    session.modified = True
-    num = len(session["order_products"])
-    # return jsonify({'badge_number': num})
-    return "yyyyyyyyyeeeeeeeeeessssssss"
+# @bp.route("/order/add", methods=['POST', 'GET'])
+# def add_order():
+#     data = request.get_json()
+#     if "order_products" not in session:
+#         session["order_products"] = {}
+#     session["order_products"].append(data)
+#     session.modified = True
+#     num = len(session["order_products"])
+#     return jsonify(result=num)
 
 
 @bp.route("/cart", methods=["GET", "POST"])
