@@ -3,22 +3,19 @@ $(function () {
         event.preventDefault();
         let number = $("#number").val();
         let id = $("#add_to_cart").attr("data-order-id");
-        let data = JSON.stringify({numbers: number, id: id});
-        const url = 'http://127.0.0.1:5000/api/order/add/';
+        let data = {numbers: number, id: id};
+        const url = 'http://127.0.0.1:5000/order/add/';
         $.ajax({
             url: url,
-            data: {numbers: number, id: id},
-            method: "GET",
-            success: function (data) {
-                console.log("success");}
-
+            data: data,
+            method: "POST",
             })
-            // .done(function (response) {
-            //     // $("#orderCount").html(result);
-            //     alert("درخواست با موفقیت انجام شد" + response);
-            // })
-            // .fail(function () {
-            //     alert("درخواست شما ثبت نشد");
-            // });
+            .done(function (result) {
+                $("#orderCount").html(result);
+                alert("درخواست با موفقیت انجام شد");
+            })
+            .fail(function () {
+                alert("درخواست شما ثبت نشد");
+            });
     });
 });

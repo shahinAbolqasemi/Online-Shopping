@@ -1,18 +1,9 @@
-# import functools
 import json
 import pymongo
 from bson import ObjectId
 from online_shopping.db import get_db
 from datetime import datetime
-# import psycopg2.extras
-# from flask import flash
-# from flask import redirect
 from flask import render_template, Blueprint, session, request, jsonify, current_app
-
-# from flask import url_for
-# from werkzeug.security import check_password_hash
-# from werkzeug.security import generate_password_hash
-# from flaskr.db import get_db
 
 bp = Blueprint('store', __name__)
 
@@ -118,7 +109,7 @@ def get_single_category():
     return categories_of_single
 
 
-@bp.route("/category/<category_name>")
+@bp.route("/category/<category_name>/")
 def category(category_name):
     side_cat_pro_name = get_single_category()
     page_products = list(get_products_by_category(category_name))
@@ -180,7 +171,7 @@ def get_product(product_id):
     ])
 
 
-@bp.route("/product/<product_id>", methods=["GET", "POST"])
+@bp.route("/product/<product_id>/", methods=["GET", "POST"])
 def product(product_id):
     pro = get_product(product_id)
     pro = [i for i in pro][0]
@@ -188,30 +179,34 @@ def product(product_id):
     return render_template('blog/product.html', product=pro, pro_category=cat)
 
 
-# @bp.route("/order/add", methods=['POST', 'GET'])
-# def add_order():
-#     data = request.get_json()
-#     if "order_products" not in session:
-#         session["order_products"] = {}
-#     session["order_products"].append(data)
-#     session.modified = True
-#     num = len(session["order_products"])
-#     return jsonify(result=num)
+@bp.route("/order/add/", methods=['POST'])
+def add_order():
+    data = request.form
+    if "order_products" not in session:
+        session["order_products"] = []
+    product_info = {"number": data.get('numbers'), "id": data.get('id')}
+    session["order_products"].append(product_info)
+    session.modified = True
+    num = len(session["order_products"])
+    print(session["order_products"])
+
+    return jsonify(result=num)
 
 
-@bp.route("/cart", methods=["GET", "POST"])
+@bp.route("/cart/", methods=["GET", "POST"])
 def cart():
     orders = []
     if 'order_products' not in session:
-        session['order_products'] = {}
+        session['order_products'] = []
     else:
         for item in session['order_products']:
-            orders.append({"product": get_product(item["id"]), "numbers": item["numbers"]})
-    total_price = sum(order["product"]['price'] * order['number'] for order in orders)
+            orders.append({"product": list(get_product(item["id"]))[0], "number": item["number"]})
+    print(orders)
+    total_price = sum([order["product"]['price'] * order['number'] for order in orders])
     return render_template('blog/cart.html', orders=orders, total_price=total_price)
 
 
-@bp.route("/delete_order_product", methods=['POST'])
+@bp.route("/delete_order_product/", methods=['POST'])
 def delete_order_product():
     data = request.get_json()
     for item in session["order_products"]:
@@ -223,12 +218,12 @@ def delete_order_product():
     return jsonify({'status': 'fail'})
 
 
-@bp.route("/cart/approve")
+@bp.route("/cart/approve/")
 def cart_approve():
     return render_template('blog/cart_approve.html')
 
 
-@bp.route("/order_final", methods=['POST'])
+@bp.route("/order_final/", methods=['POST'])
 def order_final():
     if session["order_products"]:
         data = request.get_json()
