@@ -23,7 +23,7 @@
                             <td class="price">{{ order.product.price }}</td>
                             <td class="numbers">{{ order.number }}</td>
                             <td>
-                                <button type="button" class="btn btn-light" id="{{ order.product.id }}"
+                                <button type="button" class="btn btn-light" id="{{ order.product["_id"] }}"
                                         data-order-id="{{ order.product.id }}">حذف
                                 </button>
                             </td>

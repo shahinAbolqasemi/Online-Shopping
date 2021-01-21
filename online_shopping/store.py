@@ -234,9 +234,12 @@ def delete_order_product():
     data = request.form
     for item in session["order_products"]:
         if item["id"] == data.get('id'):
-            del session["order_products"][item]
+            session["order_products"].remove(item)
             session.modified = True
+            # print("something deleting", item["id"], data.get('id'))
             break
+        # else:
+            # print("nothing found to delete", "session id" + item["id"], "pro id" + data.get('id'))
     num = len(session["order_products"])
 
     return jsonify(result=num)
