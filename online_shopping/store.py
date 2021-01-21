@@ -4,6 +4,8 @@ from bson import ObjectId
 from online_shopping.db import get_db
 from datetime import datetime
 from flask import render_template, Blueprint, session, request, jsonify, current_app
+from bson.decimal128 import Decimal128, create_decimal128_context
+import decimal
 
 bp = Blueprint('store', __name__)
 
@@ -80,7 +82,11 @@ def home():
         full_category.append({'single_category': cat,
                               'products': pro})
 
-    return render_template('blog/home.html', categories=full_category)
+    if "order_products" not in session:
+        session["order_products"] = []
+    num = len(session["order_products"])
+
+    return render_template('blog/home.html', categories=full_category, badge_num=num)
 
 
 def get_single_category():
@@ -105,7 +111,7 @@ def get_single_category():
             categories_of_single[thing_category] = []
             pro_details = {"id": thing["_id"], "name": thing["name"], "product_category": thing_category}
             categories_of_single[thing_category].append(pro_details)
-    print(categories_of_single, products)
+    # print(categories_of_single, products)
     return categories_of_single
 
 
@@ -113,9 +119,14 @@ def get_single_category():
 def category(category_name):
     side_cat_pro_name = get_single_category()
     page_products = list(get_products_by_category(category_name))
+
+    if "order_products" not in session:
+        session["order_products"] = []
+    num = len(session["order_products"])
+
     return render_template('blog/category.html', side_categories=side_cat_pro_name,
                            page_products=page_products,
-                           category_single=category_name)
+                           category_single=category_name, badge_num=num)
 
 
 def get_product(product_id):
@@ -176,7 +187,12 @@ def product(product_id):
     pro = get_product(product_id)
     pro = [i for i in pro][0]
     cat = pro["category"].split('/')[-1]
-    return render_template('blog/product.html', product=pro, pro_category=cat)
+
+    if "order_products" not in session:
+        session["order_products"] = []
+    num = len(session["order_products"])
+
+    return render_template('blog/product.html', product=pro, pro_category=cat, badge_num=num)
 
 
 @bp.route("/order/add/", methods=['POST'])
@@ -188,7 +204,6 @@ def add_order():
     session["order_products"].append(product_info)
     session.modified = True
     num = len(session["order_products"])
-    print(session["order_products"])
 
     return jsonify(result=num)
 
@@ -201,26 +216,39 @@ def cart():
     else:
         for item in session['order_products']:
             orders.append({"product": list(get_product(item["id"]))[0], "number": item["number"]})
-    print(orders)
-    total_price = sum([order["product"]['price'] * order['number'] for order in orders])
-    return render_template('blog/cart.html', orders=orders, total_price=total_price)
+
+    D128_CTX = create_decimal128_context()
+    with decimal.localcontext(D128_CTX):
+        total_price = sum(
+            [order["product"]['price'].to_decimal() * Decimal128(order['number']).to_decimal() for order in orders])
+
+    if "order_products" not in session:
+        session["order_products"] = []
+    num = len(session["order_products"])
+
+    return render_template('blog/cart.html', orders=orders, total_price=total_price, badge_num=num)
 
 
 @bp.route("/delete_order_product/", methods=['POST'])
 def delete_order_product():
-    data = request.get_json()
+    data = request.form
     for item in session["order_products"]:
-        if data['id'] in item:
+        if item["id"] == data.get('id'):
             del session["order_products"][item]
             session.modified = True
-            num = len(session["order_products"])
-            return jsonify({'badge_number': num, 'status': 'success'})
-    return jsonify({'status': 'fail'})
+            break
+    num = len(session["order_products"])
+
+    return jsonify(result=num)
 
 
 @bp.route("/cart/approve/")
 def cart_approve():
-    return render_template('blog/cart_approve.html')
+    if "order_products" not in session:
+        session["order_products"] = []
+    num = len(session["order_products"])
+
+    return render_template('blog/cart_approve.html', badge_num=num)
 
 
 @bp.route("/order_final/", methods=['POST'])

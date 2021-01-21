@@ -1,4 +1,5 @@
 {% extends "blog/base.html" %}
+{% block badge %}<span id="buyCount" class="badge bg-danger">{{ badge_num }}</span>{% endblock %}
 {% block style %}
     <style>a {
         text-decoration: none
@@ -30,23 +31,26 @@
                         گروه {{ category_single }}</h1></div>
                     <div class="d-flex flex-row">
                         {% for item in page_products %}
-                            <a href="{{ url_for('store.product', product_id=item["_id"]) }}">
-                                <div class="col card m-4 border border-primary rounded" style="width: 300px;">
-                                    {% if item.image %}
-                                        <img class="card-img-top" style="height: 150px" src="{{ item.image }}"
-                                             alt="{{ item.name }}">
-                                    {% else %}
-                                        <img class="card-img-top" style="height: 150px" src="../../static/images/empty.jpg"
-                                             alt="{{ item.name }}">
-                                    {% endif %}
-                                    <div class="card-body">
-                                        <h5 class="card-title">{{ item.name }}</h5>
+                            <div class="col col-4">
+                                <a href="{{ url_for('store.product', product_id=item["_id"]) }}">
+                                    <div class="col card m-4 border border-primary rounded">
+                                        {% if item.image %}
+                                            <img class="card-img-top" src="{{ item.image }}"
+                                                 alt="{{ item.name }}">
+                                        {% else %}
+                                            <img class="card-img-top"
+                                                 src="../../static/images/empty.jpg"
+                                                 alt="{{ item.name }}">
+                                        {% endif %}
+                                        <div class="card-body">
+                                            <h5 class="card-title">{{ item.name }}</h5>
+                                        </div>
+                                        <div class="card-footer d-flex justify-content-between">
+                                            <div><small class="text-muted">{{ item.price }} تومان</small></div>
+                                        </div>
                                     </div>
-                                    <div class="card-footer d-flex justify-content-between">
-                                        <div><small class="text-muted">{{ item.price }} تومان</small></div>
-                                    </div>
-                                </div>
-                            </a>
+                                </a>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>

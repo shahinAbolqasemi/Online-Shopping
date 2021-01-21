@@ -1,5 +1,5 @@
 $(function () {
-    $("#delete_product").on("click", function (event) {
+    $('#order_table button').on("click", function (event) {
         event.preventDefault();
         let id = $(this).attr("id");
         let tr = $(this).closest("tr");
@@ -8,23 +8,19 @@ $(function () {
         const url = 'http://127.0.0.1:5000/delete_order_product/';
         $.ajax({
             url: url,
-            data: JSON.stringify({id: id}),
+            data: {id: id},
             method: "POST",
-            headers: {
-                // "X-CSRFToken": csrftoken
-            },
-            crossDomain: true,
         })
             .done(function (result) {
                 let $total = $("#products_sum")
                 let total_price = parseFloat($total.html());
-                $total.html(toString(total_price - price * numbers));
-                $("#orderCount").html(result['badge_number']);
+                $total.html(total_price - price * numbers);
                 tr.remove();
+                $("#buyCount").html(result);
                 alert("درخواست با موفقیت حذف شد")
             })
-            .fail(function (error) {
-                alert("درخواست شما انجام نشد" + error);
+            .fail(function () {
+                alert("درخواست شما انجام نشد");
             });
     });
 });

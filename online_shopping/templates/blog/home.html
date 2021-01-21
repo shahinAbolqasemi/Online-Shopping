@@ -1,8 +1,5 @@
 {% extends 'blog/base.html' %}
-{% block style %}
-    <style>a {
-        text-decoration: none
-    }</style>{% endblock %}
+{% block badge %}<span id="buyCount" class="badge bg-danger">{{ badge_num }}</span>{% endblock %}
 {% block body %}
     <div class="content m-3 row">
         {% for category in categories %}

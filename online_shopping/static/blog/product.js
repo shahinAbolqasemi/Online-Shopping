@@ -11,7 +11,7 @@ $(function () {
             method: "POST",
             })
             .done(function (result) {
-                $("#orderCount").html(result);
+                $("#buyCount").html(result["result"]);
                 alert("درخواست با موفقیت انجام شد");
             })
             .fail(function () {
