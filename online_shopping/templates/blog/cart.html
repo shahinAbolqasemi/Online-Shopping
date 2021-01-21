@@ -23,7 +23,7 @@
                             <td class="price">{{ order.product.price }}</td>
                             <td class="numbers">{{ order.number }}</td>
                             <td>
-                                <button type="button" class="btn btn-light" id="{{ order.product["_id"] }}"
+                                <button type="button" class="btn btn-outline-secondary" id="{{ order.product["_id"] }}"
                                         data-order-id="{{ order.product.id }}">حذف
                                 </button>
                             </td>
@@ -35,7 +35,7 @@
                     <div class="col-4 d-inline-flex"><h3>جمع:</h3><h4 class="mx-4"
                                                                       id="products_sum">{{ total_price }}</h4></div>
                     <div class="col col-3"><a href="{{ url_for('store.cart_approve') }}">
-                        <button type="button" class="btn btn-success w-100">نهایی کردن سبد خرید</button>
+                        <button type="button" class="btn btn-outline-success w-100">نهایی کردن سبد خرید</button>
                     </a></div>
                 </div>
             </div>

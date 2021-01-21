@@ -76,6 +76,7 @@ def get_products_by_category(cat):
 @bp.route('/', methods=["GET", "POST"])
 def home():
     categories = get_categories()
+
     full_category = []
     for cat in categories:
         pro = list(get_products_by_category(cat))
@@ -111,7 +112,7 @@ def get_single_category():
             categories_of_single[thing_category] = []
             pro_details = {"id": thing["_id"], "name": thing["name"], "product_category": thing_category}
             categories_of_single[thing_category].append(pro_details)
-    # print(categories_of_single, products)
+
     return categories_of_single
 
 
@@ -198,11 +199,13 @@ def product(product_id):
 @bp.route("/order/add/", methods=['POST'])
 def add_order():
     data = request.form
+
     if "order_products" not in session:
         session["order_products"] = []
     product_info = {"number": data.get('numbers'), "id": data.get('id')}
     session["order_products"].append(product_info)
     session.modified = True
+
     num = len(session["order_products"])
 
     return jsonify(result=num)
@@ -236,10 +239,8 @@ def delete_order_product():
         if item["id"] == data.get('id'):
             session["order_products"].remove(item)
             session.modified = True
-            # print("something deleting", item["id"], data.get('id'))
             break
-        # else:
-            # print("nothing found to delete", "session id" + item["id"], "pro id" + data.get('id'))
+
     num = len(session["order_products"])
 
     return jsonify(result=num)
@@ -257,20 +258,24 @@ def cart_approve():
 @bp.route("/order_final/", methods=['POST'])
 def order_final():
     if session["order_products"]:
-        data = request.get_json()
+        data = request.form
+
         purchasedProductsId = []
         for item in session["order_products"]:
             pro = get_product(item['id'])
             purchasedProductsId.append(
-                {"productId": {"$oid": pro["_id"]}, "name": pro.name, "warehouseName": pro.warehouse_name,
-                 "count": item.numbers, "price": {"$numberDecimal": pro.price}, })
-        total_price = sum(order['price'] * order['count'] for order in purchasedProductsId)
-        product_document = {"customerFirstName": data.first_name, "customerLastName": data.last_name,
-                            "customerCellPhoneNum": data.telephone, "address": data.addrecc,
-                            "deliveryDate": {"$date": data.date}, "amount": {"$numberDecimal": total_price},
-                            "date": current_app.config['TEHRAN_TZ'].localize(datetime.now())}
+                {"productId": ObjectId(pro["_id"]), "name": pro['name'], "warehouseName": pro['warehouse_name'],
+                 "count": item['number'], "price": {"$numberDecimal": pro['price']}})
+
+        total_price = sum([get_product(order['id'])['price'] * order['number'] for order in session["order_products"]])
+
+        product_document = {"customerFirstName": data.get['first_name'], "customerLastName": data.get['last_name'],
+                            "customerCellPhoneNum": data.get['telephone'], "address": data.get['address'],
+                            "deliveryDate": {"$date": data.get['date']}, "amount": {"$numberDecimal": total_price},
+                            "date": current_app.config['TEHRAN_TZ'].localize(datetime.now()),
+                            'purchasedProductsId': purchasedProductsId}
         try:
-            get_db('products').insert_one(product_document)
+            get_db('orders').insert_one(product_document)
         except Exception as ex:
             return jsonify({'status': "fail", 'exception': ex})
         else:
