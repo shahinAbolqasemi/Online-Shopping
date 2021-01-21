@@ -19,12 +19,11 @@ $(function () {
             crossDomain: true,
         })
             .done(function (result) {
-                $("#orderCount").html(result['badge_number']);
                 alert("ثبت نهایی سفارش با موفقیت انجام شد")
                 document.location = 'http://127.0.0.1:5000/';
             })
-            .fail(function (error) {
-                alert("درخواست شما ثبت نشد" + error);
+            .fail(function () {
+                alert("درخواست شما ثبت نشد");
             });
     });
 });

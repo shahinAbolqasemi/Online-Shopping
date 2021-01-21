@@ -12,11 +12,12 @@ $(function () {
             method: "POST",
         })
             .done(function (result) {
+                $("#buyCount").html(result["result"]);
                 let $total = $("#products_sum")
                 let total_price = parseFloat($total.html());
                 $total.html(total_price - price * numbers);
                 tr.remove();
-                $("#buyCount").html(result);
+
                 alert("درخواست با موفقیت حذف شد")
             })
             .fail(function () {
