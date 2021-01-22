@@ -9,7 +9,10 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
     {% block links %}{% endblock %}
     <title>{% block title %}online-shopping{% endblock %}</title>
-    {% block style %}{% endblock %}
+    {% block style %}
+        <style>a {
+            text-decoration: none
+        }</style>{% endblock %}
 </head>
 
 <body>
@@ -17,7 +20,8 @@
     <div>
         <a class="navbar-brand" href="{{ url_for('store.home') }}">
             <div class="d-inline-flex">
-                <img src="" width="50" height="50" class="d-inline-block align-top" alt="">
+                <img src="../../static/images/shopping_icom.png" width="50" height="50" class="d-inline-block align-top"
+                     alt="shopping_icon">
                 <h1 class="font-weight-bold mar">فروشگاه آنلاین</h1>
             </div>
         </a>

@@ -1,18 +1,11 @@
-# import functools
 import json
 import pymongo
 from bson import ObjectId
 from online_shopping.db import get_db
 from datetime import datetime
-# import psycopg2.extras
-# from flask import flash
-# from flask import redirect
 from flask import render_template, Blueprint, session, request, jsonify, current_app
-
-# from flask import url_for
-# from werkzeug.security import check_password_hash
-# from werkzeug.security import generate_password_hash
-# from flaskr.db import get_db
+from bson.decimal128 import Decimal128, create_decimal128_context
+import decimal
 
 bp = Blueprint('store', __name__)
 
@@ -83,13 +76,18 @@ def get_products_by_category(cat):
 @bp.route('/', methods=["GET", "POST"])
 def home():
     categories = get_categories()
+
     full_category = []
     for cat in categories:
         pro = list(get_products_by_category(cat))
         full_category.append({'single_category': cat,
                               'products': pro})
 
-    return render_template('blog/home.html', categories=full_category)
+    if "order_products" not in session:
+        session["order_products"] = []
+    num = len(session["order_products"])
+
+    return render_template('blog/home.html', categories=full_category, badge_num=num)
 
 
 def get_single_category():
@@ -114,17 +112,22 @@ def get_single_category():
             categories_of_single[thing_category] = []
             pro_details = {"id": thing["_id"], "name": thing["name"], "product_category": thing_category}
             categories_of_single[thing_category].append(pro_details)
-    print(categories_of_single, products)
+
     return categories_of_single
 
 
-@bp.route("/category/<category_name>")
+@bp.route("/category/<category_name>/")
 def category(category_name):
     side_cat_pro_name = get_single_category()
     page_products = list(get_products_by_category(category_name))
+
+    if "order_products" not in session:
+        session["order_products"] = []
+    num = len(session["order_products"])
+
     return render_template('blog/category.html', side_categories=side_cat_pro_name,
                            page_products=page_products,
-                           category_single=category_name)
+                           category_single=category_name, badge_num=num)
 
 
 def get_product(product_id):
@@ -180,71 +183,99 @@ def get_product(product_id):
     ])
 
 
-@bp.route("/product/<product_id>", methods=["GET", "POST"])
+@bp.route("/product/<product_id>/", methods=["GET", "POST"])
 def product(product_id):
     pro = get_product(product_id)
     pro = [i for i in pro][0]
     cat = pro["category"].split('/')[-1]
-    return render_template('blog/product.html', product=pro, pro_category=cat)
+
+    if "order_products" not in session:
+        session["order_products"] = []
+    num = len(session["order_products"])
+
+    return render_template('blog/product.html', product=pro, pro_category=cat, badge_num=num)
 
 
-# @bp.route("/order/add", methods=['POST', 'GET'])
-# def add_order():
-#     data = request.get_json()
-#     if "order_products" not in session:
-#         session["order_products"] = {}
-#     session["order_products"].append(data)
-#     session.modified = True
-#     num = len(session["order_products"])
-#     return jsonify(result=num)
+@bp.route("/order/add/", methods=['POST'])
+def add_order():
+    data = request.form
+
+    if "order_products" not in session:
+        session["order_products"] = []
+    product_info = {"number": data.get('numbers'), "id": data.get('id')}
+    session["order_products"].append(product_info)
+    session.modified = True
+
+    num = len(session["order_products"])
+
+    return jsonify(result=num)
 
 
-@bp.route("/cart", methods=["GET", "POST"])
+@bp.route("/cart/", methods=["GET", "POST"])
 def cart():
     orders = []
     if 'order_products' not in session:
-        session['order_products'] = {}
+        session['order_products'] = []
     else:
         for item in session['order_products']:
-            orders.append({"product": get_product(item["id"]), "numbers": item["numbers"]})
-    total_price = sum(order["product"]['price'] * order['number'] for order in orders)
-    return render_template('blog/cart.html', orders=orders, total_price=total_price)
+            orders.append({"product": list(get_product(item["id"]))[0], "number": item["number"]})
+
+    D128_CTX = create_decimal128_context()
+    with decimal.localcontext(D128_CTX):
+        total_price = sum(
+            [order["product"]['price'].to_decimal() * Decimal128(order['number']).to_decimal() for order in orders])
+
+    if "order_products" not in session:
+        session["order_products"] = []
+    num = len(session["order_products"])
+
+    return render_template('blog/cart.html', orders=orders, total_price=total_price, badge_num=num)
 
 
-@bp.route("/delete_order_product", methods=['POST'])
+@bp.route("/delete_order_product/", methods=['POST'])
 def delete_order_product():
-    data = request.get_json()
+    data = request.form
     for item in session["order_products"]:
-        if data['id'] in item:
-            del session["order_products"][item]
+        if item["id"] == data.get('id'):
+            session["order_products"].remove(item)
             session.modified = True
-            num = len(session["order_products"])
-            return jsonify({'badge_number': num, 'status': 'success'})
-    return jsonify({'status': 'fail'})
+            break
+
+    num = len(session["order_products"])
+
+    return jsonify(result=num)
 
 
-@bp.route("/cart/approve")
+@bp.route("/cart/approve/")
 def cart_approve():
-    return render_template('blog/cart_approve.html')
+    if "order_products" not in session:
+        session["order_products"] = []
+    num = len(session["order_products"])
+
+    return render_template('blog/cart_approve.html', badge_num=num)
 
 
-@bp.route("/order_final", methods=['POST'])
+@bp.route("/order_final/", methods=['POST'])
 def order_final():
     if session["order_products"]:
-        data = request.get_json()
+        data = request.form
+
         purchasedProductsId = []
         for item in session["order_products"]:
             pro = get_product(item['id'])
             purchasedProductsId.append(
-                {"productId": {"$oid": pro["_id"]}, "name": pro.name, "warehouseName": pro.warehouse_name,
-                 "count": item.numbers, "price": {"$numberDecimal": pro.price}, })
-        total_price = sum(order['price'] * order['count'] for order in purchasedProductsId)
-        product_document = {"customerFirstName": data.first_name, "customerLastName": data.last_name,
-                            "customerCellPhoneNum": data.telephone, "address": data.addrecc,
-                            "deliveryDate": {"$date": data.date}, "amount": {"$numberDecimal": total_price},
-                            "date": current_app.config['TEHRAN_TZ'].localize(datetime.now())}
+                {"productId": ObjectId(pro["_id"]), "name": pro['name'], "warehouseName": pro['warehouse_name'],
+                 "count": item['number'], "price": {"$numberDecimal": pro['price']}})
+
+        total_price = sum([get_product(order['id'])['price'] * order['number'] for order in session["order_products"]])
+
+        product_document = {"customerFirstName": data.get['first_name'], "customerLastName": data.get['last_name'],
+                            "customerCellPhoneNum": data.get['telephone'], "address": data.get['address'],
+                            "deliveryDate": {"$date": data.get['date']}, "amount": {"$numberDecimal": total_price},
+                            "date": current_app.config['TEHRAN_TZ'].localize(datetime.now()),
+                            'purchasedProductsId': purchasedProductsId}
         try:
-            get_db('products').insert_one(product_document)
+            get_db('orders').insert_one(product_document)
         except Exception as ex:
             return jsonify({'status': "fail", 'exception': ex})
         else:

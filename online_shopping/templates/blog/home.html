@@ -1,8 +1,5 @@
 {% extends 'blog/base.html' %}
-{% block style %}
-    <style>a {
-        text-decoration: none
-    }</style>{% endblock %}
+{% block badge %}<span id="buyCount" class="badge bg-danger">{{ badge_num }}</span>{% endblock %}
 {% block body %}
     <div class="content m-3 row">
         {% for category in categories %}
@@ -18,7 +15,7 @@
                                     <img class="card-img-top" src="{{ product.image }}"
                                          alt="{{ product.name }}">
                                 {% else %}
-                                    <img class="card-img-top" src="{{ product.image }}"
+                                    <img class="card-img-top" src="../../static/images/empty.jpg"
                                          alt="{{ product.name }}">
                                 {% endif %}
                                 <div class="card-body">

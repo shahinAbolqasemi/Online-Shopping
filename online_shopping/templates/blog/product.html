@@ -1,14 +1,14 @@
 {% extends "blog/base.html" %}
-{% block style %}
-    <style>a {
-        text-decoration: none
-    }</style>{% endblock %}
-{% block badge %}<span id="orderCount" class="badge bg-danger"></span>{% endblock %}
+{% block badge %}<span id="buyCount" class="badge bg-danger">{{ badge_num }}</span>{% endblock %}
 {% block body %}
     <div class="row p-5">
         <div class="col col-4">
             <div class="border border-primary rounded p-1">
-                <img src="{{ product.image }}" alt="{{ product.name }}" style="width:100%">
+                {% if product.image %}
+                    <img src="{{ product.image }}" alt="{{ product.name }}" style="width:100%">
+                {% else %}
+                    <img src="../../static/images/empty.jpg" alt="{{ product.name }}" style="width:100%">
+                {% endif %}
             </div>
         </div>
         <div class="col col-4">
