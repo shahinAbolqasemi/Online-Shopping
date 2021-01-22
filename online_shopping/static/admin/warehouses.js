@@ -1,12 +1,14 @@
 // Add warehouse
-$("#addWarehouse").click(function (e) {
+$(".addWarehouse").click(function (e) {
   e.preventDefault();
   var $tbody = $("tbody");
   var url = "http://127.0.0.1:5000/api/warehouse/add/";
-  $("#addModal #saveBtnAdd").click(function () {
+  $("#addModal .saveBtnAdd").click(function () {
     var $name = $("#warehouseName").val();
     var row = "<tr>";
     row += "<td>" + $name + "</td>";
+    row += "<td><button type='button' class='btn btn-link editWarehouse' data-bs-toggle='modal' data-bs-target='#editModal'>ویرایش </button>";
+    row += "<button type='button' class='btn btn-link deleteWarehouse' data-bs-toggle='modal' data-bs-target='#deleteModal'>حذف </button></td>";
     row += "</tr>";
     $.ajax({
       url: url,
@@ -18,28 +20,36 @@ $("#addWarehouse").click(function (e) {
       crossDomain: true,
     })
       .done(function (result) {
+          // console.log(result);
         var tag =
-          row.slice(0, 3) + " data-warehouse-id='" + result.warehouse_id + "'";
+          row.slice(0, 3) + " data-warehouse-id='" + result.data.warehouseId + "'";
         row = row.replace("<tr", tag);
+        console.log("row: ", row);
         $($tbody).prepend(row);
+        console.log('done');
+      // $("#addModal").modal("toggle");
       })
       .fail(function (error) {
         alert("error");
+      // $("#addModal").modal("toggle");
       });
+  $("#addModal").modal("toggle");
   });
 });
 
 // Edit warehouse
-$("#editWarehouse").click(function (e) {
+$(".editWarehouse").click(function (e) {
   e.preventDefault();
   var $tbody = $("tbody");
   var $tr = $(this).closest("tr");
   var $warehouseId = $tr.attr("data-warehouse-id");
   var url = "http://127.0.0.1:5000/api/warehouse/edit/";
-  $("#editModal #saveBtnEdit").click(function () {
+  $("#editModal .saveBtnEdit").click(function () {
     var $name = $("#warehouseName").val();
     var row = "<tr data-warehouse-id='" + $warehouseId + "'>";
     row += "<td>" + $name + "</td>";
+    row += "<td><button type='button' class='btn btn-link editWarehouse' data-bs-toggle='modal' data-bs-target='#editModal'>ویرایش </button>";
+    row += "<button type='button' class='btn btn-link deleteWarehouse' data-bs-toggle='modal' data-bs-target='#deleteModal'>حذف </button></td>";
     row += "</tr>";
     $.ajax({
       url: url,
@@ -53,25 +63,31 @@ $("#editWarehouse").click(function (e) {
       .done(function (result) {
         $($tr).remove();
         $($tbody).prepend(row);
+        // console.log('done');
+        // $("#editModal").modal("toggle");
       })
       .fail(function (error) {
         alert("error");
+      // $("#editModal").modal("toggle");
       });
+      $("#editModal").modal("toggle");
   });
 });
 
 // Delete warehouse
-$("#deleteWarehouse").click(function (e) {
+$(".deleteWarehouse").click(function (e) {
   e.preventDefault();
   var $tr = $(this).closest("tr");
-  var $warehouseId = $tr.attr("data-product-id");
-  console.log($warehouseId);
+  // console.log("this: ", $(this));
+  // console.log("tr: ", $tr);
+  var $warehouseId = $tr.attr("data-warehouse-id");
+  // console.log($warehouseId);
   var url = `http://127.0.0.1:5000/api/warehouse/delete/${$warehouseId}/`;
-  $("#deleteModal #saveBtnDelete").click(function (e) {
+  $("#deleteModal .saveBtnDelete").click(function (e) {
     // console.log(url)
     $.ajax({
       url: url,
-      data: { warehouseId: $warehouseId },
+      // data: { warehouseId: $warehouseId },
       method: "GET",
       headers: {
         // "X-CSRFToken": csrftoken
@@ -79,10 +95,12 @@ $("#deleteWarehouse").click(function (e) {
       crossDomain: true,
     })
       .done(function (result) {
-        $($tr).remove();
+        $tr.remove();
+        // console.log('done');
       })
       .fail(function (error) {
         alert("error");
       });
+  $("#deleteModal").modal("toggle");
   });
 });

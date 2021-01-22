@@ -2,9 +2,9 @@
 <h2 class="mt-5">مدیریت انبار ها</h2>
 <div class="mb-3 text-right">
   <button
-    id="addWarehouse"
+{#    id="addWarehouse"#}
     type="button"
-    class="btn btn-success"
+    class="btn btn-success addWarehouse"
     data-bs-toggle="modal"
     data-bs-target="#addModal"
   >
@@ -18,15 +18,14 @@
       <th></th>
     </tr>
   </thead>
-  {% for warehouse in warehouses %}
   <tbody>
+    {% for warehouse in warehouses %}
     <tr data-warehouse-id="{{ warehouse._id }}">
       <td>{{ warehouse.name }}</td>
       <td>
         <button
           type="button"
-          id="editWarehouse"
-          class="btn btn-link"
+          class="btn btn-link editWarehouse"
           data-bs-toggle="modal"
           data-bs-target="#editModal"
         >
@@ -34,8 +33,7 @@
         </button>
         <button
           type="button"
-          id="deleteWarehouse"
-          class="btn btn-link"
+          class="btn btn-link deleteWarehouse"
           data-bs-toggle="modal"
           data-bs-target="#deleteModal"
         >
@@ -43,8 +41,8 @@
         </button>
       </td>
     </tr>
+    {% endfor %}
   </tbody>
-  {% endfor %}
 </table>
 <!-- Add Modal -->
 <div
@@ -77,7 +75,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           بستن
         </button>
-        <button type="button" class="btn btn-primary" id="saveBtnAdd">
+        <button type="button" class="btn btn-primary saveBtnAdd">
           ذخیره
         </button>
       </div>
@@ -116,7 +114,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           بستن
         </button>
-        <button type="button" class="btn btn-primary" id="saveBtnEdit">
+        <button type="button" class="btn btn-primary saveBtnEdit">
           ذخیره
         </button>
       </div>
@@ -150,7 +148,7 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           خیر
         </button>
-        <button type="button" class="btn btn-primary" id="saveBtnDelete">
+        <button type="button" class="btn btn-primary saveBtnDelete">
           بله
         </button>
       </div>
