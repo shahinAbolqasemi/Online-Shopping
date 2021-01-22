@@ -1,13 +1,17 @@
 {% extends "blog/base.html" %}
-{% block badge %}<span id="orderCount" class="badge bg-danger"></span>{% endblock %}
+{% block badge %}<span id="buyCount" class="badge bg-danger">{{ badge_num }}</span>{% endblock %}
 {% block body %}
     <div class="row p-5">
-        <div class="col col-6">
+        <div class="col col-4">
             <div class="border border-primary rounded p-1">
-                <img src="{{ product.image }}" alt="{{ product.name }}" style="width:100%">
+                {% if product.image %}
+                    <img src="{{ product.image }}" alt="{{ product.name }}" style="width:100%">
+                {% else %}
+                    <img src="../../static/images/empty.jpg" alt="{{ product.name }}" style="width:100%">
+                {% endif %}
             </div>
         </div>
-        <div class="col col-3">
+        <div class="col col-4">
             <div>
                 <h1>
                     {{ product.name }}
@@ -15,7 +19,7 @@
             </div>
             <div class="mt-4">
                 <h4>
-                    {{ product.category }}
+                    <a href="{{ url_for('store.category', category_name=pro_category) }}">{{ product.category }}</a>
                 </h4>
             </div>
             <div class="mt-4">
@@ -24,7 +28,7 @@
             <div class="d-flex flex-row justify-content-between mt-5">
                 <div>
                     <input aria-label="" id="number" type="number" min="0" max="{{ product.quantity }}"
-                           style="width: 30%;">
+                           style="width: 80%;">
                 </div>
                 <div>
                     <button type="button" class="btn btn-outline-success" id="add_to_cart"

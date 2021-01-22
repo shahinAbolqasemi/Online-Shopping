@@ -1,4 +1,5 @@
 {% extends "blog/base.html" %}
+{% block badge %}<span id="buyCount" class="badge bg-danger">{{ badge_num }}</span>{% endblock %}
 {% block body %}
     <div class="d-flex justify-content-center mt-5">
         <div class="col col-7">
@@ -6,30 +7,34 @@
             <div class="row">
                 <div class="col">
                     <label for="first_name"><b>نام:</b></label>
-                    <input type="text" name="f_name" id="first_name" required><br><br>
+                    <input type="text" class="form-control" name="f_name" id="first_name"
+                           placeholder="نام خود را وارد کنید..." required><br><br>
                     <label for="address"><b>آدرس:</b></label>
                     <input type="text" class="form-control" id="address" placeholder="استان، شهر، خیابان، کوچه، پلاک"
-                        required><br><br>
+                           required><br><br>
                     <label for="date"><b>تاریخ تحویل:</b></label><br>
-                    <!-- <input type="text" name="deliverDate"><br> -->
                     <div class="col-12">
                         <input class="form-control" type="date" id="date">
                     </div>
                 </div>
                 <div class="col">
                     <label for="last_name"><b>نام خانوادگی:</b></label>
-                    <input type="text" name="l_name" id="last_name" required><br><br>
+                    <input type="text" class="form-control" name="l_name" id="last_name"
+                           placeholder="نام خانوادگی خود را وارد کنید..." required><br><br>
                     <div class="d-inline-flex">
                         <label for="phoneNumber"><b>تلفن همراه:</b></label>
-                        <p class="font-weight-light mx-4">جهت هماهنگی ارسال سفارش</p>
+                        <p class="text-muted mx-4">جهت هماهنگی ارسال سفارش</p>
                     </div>
-                    <input type="text" name="phoneNumber" id="phoneNumber" required>
+                    <input type="text" class="form-control" name="phoneNumber" id="phoneNumber"
+                           placeholder="شماره موبایل خود را وارد کنید..." style="margin-top: -15px;" required>
                 </div>
-            </div><br><br>
+            </div>
+            <br><br>
             <div class="d-flex justify-content-center">
-                <button type="button" class="btn btn-success px-5" id="finalizing"><b>ثبت تهایی سفارش</b></button>
+                <button type="button" class="btn btn-outline-success px-5" id="finalizing"><b>ثبت نهایی سفارش</b></button>
             </div>
         </div>
-    </div>
+    </div><br><br><br><br>
 {% endblock %}
-{% block scripts %}<script src="{{ url_for('static', filename='blog/cart_approve.js') }}"></script>{% endblock %}
+{% block scripts %}
+    <script src="{{ url_for('static', filename='blog/cart_approve.js') }}"></script>{% endblock %}

@@ -1,5 +1,5 @@
 $(function () {
-    $("#finalizing").click(function (event) {
+    $("#finalizing").on("click",function (event) {
         event.preventDefault();
         let data = {
             "first_name": $("#first_name").val(),
@@ -8,14 +8,18 @@ $(function () {
             "address": $("#address").val(),
             "telephone": $("#phoneNumber").val()
         };
-        const url = window.location.href + 'add_order';
-        $.post(url, data, function (res) {
-            if (res["status"] === "success") {
-                window.location.replace('http://127.0.0.1:5000/');
+
+        $.ajax({
+            url: 'http://127.0.0.1:5000/order_final/',
+            data: data,
+            method: "POST",
+        })
+            .done(function () {
                 alert("ثبت نهایی سفارش با موفقیت انجام شد")
-            } else {
-                alert("درخواست با خطا مواجه شد")
-            }
-        });
+                document.location = 'http://127.0.0.1:5000/';
+            })
+            .fail(function (result) {
+                alert("درخواست شما ثبت نشد" + result['status'] + result['exception']);
+            });
     });
 });

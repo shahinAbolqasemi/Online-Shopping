@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from bson import ObjectId
-from flask import Blueprint, request, jsonify, current_app, url_for
+from flask import Blueprint, request, jsonify, current_app, url_for, session
 from werkzeug.utils import secure_filename, redirect
 
 from online_shopping.admin import login_required
@@ -284,6 +284,6 @@ def order_details(order_id):
 
     #     ]
     # )
-    data = order
+    # data = order
     # data['']
     return jsonify(data=order)
