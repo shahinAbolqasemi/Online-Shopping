@@ -18,8 +18,8 @@ $(function () {
                 alert("ثبت نهایی سفارش با موفقیت انجام شد")
                 document.location = 'http://127.0.0.1:5000/';
             })
-            .fail(function (result) {
-                alert("درخواست شما ثبت نشد" + result['status'] + result['exception']);
+            .fail(function () {
+                alert("درخواست شما ثبت نشد");
             });
     });
 });

@@ -37,9 +37,9 @@ def prod_add():
     if image_file:
         filename = secure_filename(image_file.filename)
         image_file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
-        image_url = url_for('uploads', filename=filename)
+        image_url = url_for('uploaded_file', filename=filename)
     else:
-        image_url = url_for('uploads', filename='default_product_image.jpg')
+        image_url = url_for('uploaded_file', filename='default_product_image.jpg')
 
     product_document = {
         'name': request.form.get('name'),
@@ -49,7 +49,7 @@ def prod_add():
         'image': image_url
     }
     try:
-        product_added = get_db('products').insert_one(product_document)
+        product_added = next(get_db('products').insert_one(product_document))
     except (Exception) as ex:
         return jsonify(status={'status': False})
     else:
@@ -127,7 +127,7 @@ def ware_list():
 def ware_add():
     warehouse_name = request.form.get('name')
     try:
-        warehouse_added = get_db("warehouses").insert_one({'name': warehouse_name})
+        warehouse_added = next(get_db("warehouses").insert_one({'name': warehouse_name}))
     except (Exception) as ex:
         return jsonify(status={'success': False})
     else:

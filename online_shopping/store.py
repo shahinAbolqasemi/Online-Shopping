@@ -86,6 +86,7 @@ def home():
     if "order_products" not in session:
         session["order_products"] = []
     num = len(session["order_products"])
+    print(session["order_products"], 111111111111)
 
     return render_template('blog/home.html', categories=full_category, badge_num=num)
 
@@ -204,7 +205,7 @@ def add_order():
         session["order_products"] = []
     product_info = {"number": data.get('numbers'), "id": data.get('id')}
     session["order_products"].append(product_info)
-    session.modified = True
+    # session.modified = True
 
     num = len(session["order_products"])
 
@@ -262,22 +263,26 @@ def order_final():
 
         purchasedProductsId = []
         for item in session["order_products"]:
-            pro = get_product(item['id'])
+            pro = next(get_product(item['id']))
             purchasedProductsId.append(
                 {"productId": ObjectId(pro["_id"]), "name": pro['name'], "warehouseName": pro['warehouse_name'],
                  "count": item['number'], "price": {"$numberDecimal": pro['price']}})
 
-        total_price = sum([get_product(order['id'])['price'] * order['number'] for order in session["order_products"]])
+        D128_CTX = create_decimal128_context()
+        with decimal.localcontext(D128_CTX):
+            total_price = sum(
+                [next(get_product(order['id']))['price'].to_decimal() * Decimal128(order['number']).to_decimal() for order in
+                 session["order_products"]])
 
-        product_document = {"customerFirstName": data.get['first_name'], "customerLastName": data.get['last_name'],
-                            "customerCellPhoneNum": data.get['telephone'], "address": data.get['address'],
-                            "deliveryDate": {"$date": data.get['date']}, "amount": {"$numberDecimal": total_price},
+        product_document = {"customerFirstName": data.get('first_name'), "customerLastName": data.get('last_name'),
+                            "customerCellPhoneNum": data.get('telephone'), "address": data.get('address'),
+                            "deliveryDate": {"$date": data.get('date')}, "amount": {"$numberDecimal": total_price},
                             "date": current_app.config['TEHRAN_TZ'].localize(datetime.now()),
                             'purchasedProductsId': purchasedProductsId}
         try:
             get_db('orders').insert_one(product_document)
-        except Exception as ex:
-            return jsonify({'status': "fail", 'exception': ex})
+        except Exception:
+            return jsonify({'status': "fail"})
         else:
             session.pop('order_products', None)
             return jsonify({'status': "success"})
